@@ -1,0 +1,60 @@
+/* B-41 Stage 1 Moh Dzulfikri Maulana */
+
+@import url("/css/root.css");
+@import url("/css/navbar.css");
+
+.contact-me {
+  display: block;
+  margin: auto;
+}
+
+.contact-me h1 {
+  text-align: center;
+  margin-top: 110px;
+}
+
+form {
+  width: 350px;
+  margin: 0 auto;
+}
+
+label {
+  font-weight: 500;
+}
+
+input,
+select,
+textarea {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #dbdbdb;
+  box-shadow: 0 3px 5px #cecece;
+}
+select {
+  width: 106.5%;
+}
+
+textarea {
+  resize: none;
+}
+
+.submit-btn {
+  position: relative;
+}
+
+.submit-btn button {
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  color: white;
+  background-color: #111727;
+  border-radius: 25px;
+  padding: 6.5px 29px;
+  margin-top: 50px;
+  cursor: pointer;
+  right: -6.5%;
+}
