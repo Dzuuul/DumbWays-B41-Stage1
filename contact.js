@@ -5,11 +5,11 @@ function redirectToEmail() {
   let getSubject = document.getElementById("input-subject").value;
   let getMessage = document.getElementById("input-yourmessage").value;
 
-  console.log(getName);
-  console.log(getEmail);
-  console.log(getPhoneNumber);
-  console.log(getSubject);
-  console.log(getMessage);
+  // console.log(getName);
+  // console.log(getEmail);
+  // console.log(getPhoneNumber);
+  // console.log(getSubject);
+  // console.log(getMessage);
 
   if (getName == "") {
     return alert("Name Required!");
