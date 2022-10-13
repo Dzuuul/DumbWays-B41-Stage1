@@ -1,0 +1,75 @@
+@import url(/css/root.css);
+@import url(/css/navbar.css);
+
+#project-details {
+  margin: 50px auto;
+  width: 865px;
+}
+
+#project-details h1 {
+  text-align: center;
+  margin-top: 110px;
+}
+
+.container-below-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.img-crop {
+  width: 530px;
+  height: 350px;
+  margin-right: 50px;
+  margin-bottom: 35px;
+  overflow: hidden;
+}
+
+.right-duratech {
+  width: 33%;
+}
+
+.right-duratech h4 {
+  margin-bottom: 10px;
+}
+
+.right-duratech i {
+  margin-right: 7px;
+  padding: 0;
+}
+
+.duration-div {
+  margin-right: auto;
+}
+
+.duration-div h4 {
+  margin-top: 0;
+}
+
+.duration-div p {
+  margin-top: 0;
+}
+
+.technologies-div {
+  margin-top: 40px;
+}
+
+.tech-div-container {
+  display: flex;
+  margin-top: 0;
+}
+
+.top-p-tech-div {
+  margin-top: 0;
+}
+
+.left-tech-div {
+  width: 50%;
+}
+
+.right-tech-div {
+  width: 50%;
+}
+
+#contents-detail .project-message {
+  text-align: justify;
+}
