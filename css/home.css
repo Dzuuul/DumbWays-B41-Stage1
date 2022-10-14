@@ -1,0 +1,89 @@
+/* B-41 Stage 1 Moh Dzulfikri Maulana */
+
+@import url("/css/root.css");
+@import url("/css/navbar.css");
+
+.container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 5px 12px 15px #11172715;
+  margin: 17vh auto 0;
+  padding: 25px 50px;
+  width: 955px;
+  display: flex;
+  overflow: hidden;
+}
+
+.container-left {
+  padding-right: 75px;
+}
+
+.container-left h2 {
+  padding-top: 45px;
+}
+
+.container-left p {
+  text-align: justify;
+}
+
+.social-media-container i {
+  margin-right: 20px;
+}
+
+a .fa-2xl {
+  color: #111727;
+}
+
+.container button {
+  color: white;
+  background-color: #111727;
+  border: none;
+  border-radius: 20px;
+  padding: 6.5px 29px;
+  margin: 20px 20px 45px 0px;
+}
+
+.card {
+  margin: 20px 0;
+  display: flex;
+  position: relative;
+  width: 327.2px;
+  height: 439px;
+  border-radius: 8px;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 5px 5px 15px #cecece;
+}
+
+.card img {
+  position: absolute;
+  border-radius: 8px 8px 0 0;
+  width: 100%;
+  bottom: 13px;
+  left: 0;
+}
+
+.name-tag {
+  position: absolute;
+  width: 100%;
+  height: 68px;
+  bottom: 0;
+  background-color: white;
+  margin: 0;
+  padding-top: 9px;
+}
+
+.name-tag h2,
+.name-tag p {
+  position: relative;
+  margin: 0;
+  line-height: 1rem;
+}
+
+.name-tag h2 {
+  padding: 10px 0;
+}
+
+.name-tag p {
+  padding: 35px auto;
+}

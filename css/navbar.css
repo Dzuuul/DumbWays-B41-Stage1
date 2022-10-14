@@ -1,0 +1,52 @@
+/* B-41 Stage 1 Moh Dzulfikri Maulana */
+
+header {
+  background-color: #f3f3f3;
+  box-shadow: 0 2px 20px #11172720;
+  display: flex;
+  position: fixed;
+  top: 0;
+  width: 91.5vw;
+  height: 68px;
+  padding: 0 4.4vw;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9999;
+}
+
+.nav-left {
+  display: flex;
+}
+
+.nav-left ul {
+  display: flex;
+  padding: 0 20px;
+}
+
+.nav-left .logo {
+  display: flex;
+  align-items: center;
+  padding-top: 1vh;
+}
+
+.nav-left img {
+  width: 49px;
+}
+
+.nav-left li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.nav-left a {
+  text-decoration: none;
+  color: #111727;
+}
+
+.nav-right button {
+  color: white;
+  background-color: #111727;
+  border-radius: 5px;
+  padding: 5px 17px;
+}

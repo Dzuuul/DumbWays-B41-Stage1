@@ -1,0 +1,289 @@
+<!-- B-41 Moh Dzulfikri Maulana -->
+<!-- Day 4 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/add-project.css">
+  <script src="https://kit.fontawesome.com/e54d5e7924.js" crossorigin="anonymous"></script>
+  <title>My Project</title>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav-left">
+      <div class="logo">
+        <a href="/index.html">
+          <img src="https://dumbways.id/assets/images/brandred.png" alt="Dumbways Logo">
+        </a>
+      </div>
+      <ul>
+        <li><a href="/index.html">
+            <p>Home</p>
+          </a></li>
+        <li><a href="/pages/add-project.html">
+            <p class="selected">My Project</p>
+          </a></li>
+      </ul>
+    </div>
+    <div class="nav-right">
+      <a href="/pages/contact.html"><button>Contact Me</button></a>
+    </div>
+  </header>
+
+  <section>
+    <div>
+      <label for="input-project-name">
+        <h1>ADD MY PROJECT</h1>
+      </label>
+
+      <form onsubmit="addProject(event)">
+
+        <div>
+          <label for="input-project-name">Project Name</label>
+          <input type="text" id="input-project-name">
+        </div>
+
+        <div class="date-form">
+          <div>
+            <label for="input-start-date">Start Date</label>
+            <input type="text" id="input-start-date" onfocus="(this.type='date')">
+          </div>
+          <div>
+            <label for="input-end-date">End Date</label>
+            <input type="text" id="input-end-date" onfocus="(this.type='date')">
+          </div>
+        </div>
+
+        <div>
+          <label for="input-description">Description</label>
+          <textarea name="input-description" id="input-description" cols="5" rows="4"></textarea>
+        </div>
+
+        <div>
+          <label>Technologies</label>
+          <div class="checkbox-container">
+            <div class="container-box">
+              <div class="container-group-check">
+                <div class="group-check">
+                  <input type="checkbox" id="input-reactJs">
+                  <span>
+                    <label class="label-checkbox" for="input-reactJs">ReactJs</label>
+                  </span>
+                </div>
+                <div class="group-check">
+                  <input type="checkbox" id="input-vueJs">
+                  <span>
+                    <label class="label-checkbox" for="input-vueJs">VueJs</label>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="container-box">
+              <div class="container-group-check">
+                <div class="group-check">
+                  <input type="checkbox" id="input-angular">
+                  <span>
+                    <label class="label-checkbox" for="input-angular">Angular</label>
+                  </span>
+                </div>
+                <div class="group-check">
+                  <input type="checkbox" id="input-laravel">
+                  <span>
+                    <label class="label-checkbox" for="input-laravel">Laravel</label>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="input-upload-img">Upload Image</label>
+          <div class="input-upload-img-container">
+            <label for="input-upload-img">
+              <div class="input-upload-img-left">
+                <div class="choose-btn">
+                  <p>choose</p>
+                </div>
+              </div>
+              <div class="input-upload-img-right">
+                <i class="fa-solid fa-paperclip"></i>
+              </div>
+            </label>
+          </div>
+          <input type="file" id="input-upload-img" hidden>
+        </div>
+
+        <div class="submit-btn">
+          <button>Submit</button>
+        </div>
+
+      </form>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="my-project">
+      <h1>MY PROJECT</h1>
+
+      <div class="project-card-list" id="project">
+
+        <!-- Project Card 1 -->
+        <div class="project-item">
+          <div class="project-image">
+            <img src="https://media.kompas.tv/library/image/content_article/article_img/20220823221656.jpg"
+              alt="project image">
+          </div>
+          <a href="/pages/detail-project.html">
+            <h3>Dummy Title 1</h3>
+          </a>
+          <p class="duration-p">durasi : -</p>
+          <div class="item-p-container">
+            <p>App that use for dumbways student, it was deployed and can downloaded on playstore.<br>Happy download
+            </p>
+          </div>
+          <div class="item-icons">
+            <i class="fa-brands fa-react fa-xl"></i>
+            <i class="fa-brands fa-vuejs fa-xl"></i>
+            <i class="fa-brands fa-angular fa-xl"></i>
+            <i class="fa-brands fa-laravel fa-xl"></i>
+
+          </div>
+          <div class="button-group">
+            <button>edit</button>
+            <button>delete</button>
+          </div>
+        </div>
+
+        <!-- Project Card 2 -->
+        <div class="project-item">
+          <div class="project-image">
+            <img
+              src="https://img.okezone.com/content/2021/12/22/57/2520742/5-langkah-jitu-melacak-hp-yang-hilang-cukup-masukkan-nomornya-Gt93a2GjHO.jpg"
+              alt="project image">
+          </div>
+          <a href="/pages/detail-project.html">
+            <h3>Dummy Title 2</h3>
+          </a>
+          <p class="duration-p">durasi : -</p>
+          <div class="item-p-container">
+            <p>App that use for dumbways student, it was deployed and can downloaded on playstore.<br>Happy download
+            </p>
+          </div>
+          <div class="item-icons">
+            <i class="fa-brands fa-react fa-xl"></i>
+            <i class="fa-brands fa-vuejs fa-xl"></i>
+            <i class="fa-brands fa-angular fa-xl"></i>
+            <i class="fa-brands fa-laravel fa-xl"></i>
+
+          </div>
+          <div class="button-group">
+            <button>edit</button>
+            <button>delete</button>
+          </div>
+        </div>
+
+        <!-- Project Card 3 -->
+        <div class="project-item">
+          <div class="project-image">
+            <img
+              src="https://global-uploads.webflow.com/6100d0111a4ed76bc1b9fd54/624c49c184f0b563fddda92c_shahadat-rahman-O2MdroNurVw-unsplash.jpg"
+              alt="project image">
+          </div>
+          <a href="/pages/detail-project.html">
+            <h3>Dummy Title 3</h3>
+          </a>
+          <p class="duration-p">durasi : -</p>
+          <div class="item-p-container">
+            <p>App that use for dumbways student, it was deployed and can downloaded on playstore.<br>Happy download
+            </p>
+          </div>
+          <div class="item-icons">
+            <i class="fa-brands fa-react fa-xl"></i>
+            <i class="fa-brands fa-vuejs fa-xl"></i>
+            <i class="fa-brands fa-angular fa-xl"></i>
+            <i class="fa-brands fa-laravel fa-xl"></i>
+
+          </div>
+          <div class="button-group">
+            <button>edit</button>
+            <button>delete</button>
+          </div>
+        </div>
+
+        <!-- Project Card 4 -->
+        <div class="project-item">
+          <div class="project-image">
+            <img
+              src="https://pintu.co.id/_next/image?url=https%3A%2F%2Fblog.pintu.co.id%2Fwp-content%2Fuploads%2F2021%2F05%2Feftakher-alam-H0r6LB_9rz4-unsplash.jpeg&w=1920&q=75"
+              alt="project image">
+          </div>
+          <a href="/pages/detail-project.html">
+            <h3>Dummy Title 4</h3>
+          </a>
+          <p class="duration-p">durasi : -</p>
+          <div class="item-p-container">
+            <p>App that use for dumbways student, it was deployed and can downloaded on playstore.<br>Happy download
+            </p>
+          </div>
+          <div class="item-icons">
+            <i class="fa-brands fa-react fa-xl"></i>
+            <i class="fa-brands fa-vuejs fa-xl"></i>
+            <i class="fa-brands fa-angular fa-xl"></i>
+            <i class="fa-brands fa-laravel fa-xl"></i>
+
+          </div>
+          <div class="button-group">
+            <button>edit</button>
+            <button>delete</button>
+          </div>
+        </div>
+
+        <!-- Project Card 5 -->
+        <div class="project-item">
+          <div class="project-image">
+            <img
+              src="https://www.emlv.fr/wordpress/wp-content/uploads/2021/10/Comment-se-former-la-blockchain-en-ecole-de-commerce-650x380.jpg"
+              alt="project image">
+          </div>
+          <a href="/pages/detail-project.html">
+            <h3>Dummy Title 5</h3>
+          </a>
+          <p class="duration-p">durasi : -</p>
+          <div class="item-p-container">
+            <p>App that use for dumbways student, it was deployed and can downloaded on playstore.<br>Happy download
+            </p>
+          </div>
+          <div class="item-icons">
+            <i class="fa-brands fa-react fa-xl"></i>
+            <i class="fa-brands fa-vuejs fa-xl"></i>
+            <i class="fa-brands fa-angular fa-xl"></i>
+            <i class="fa-brands fa-laravel fa-xl"></i>
+
+          </div>
+          <div class="button-group">
+            <button>edit</button>
+            <button>delete</button>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </section>
+
+  <script src="/js/add-project.js"></script>
+</body>
+
+</html>
