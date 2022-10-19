@@ -1,0 +1,26 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #e1e4e9;
+}
+
+.btn-dark {
+  background-color: #101727;
+  border: none;
+}
+
+.btn-dark:hover {
+  color: white;
+  background-color: hsl(221, 40%, 23%) !important;
+}
+
+a {
+  color: #101727;
+}
+
+.fa-2xl {
+  color: #101727;
+}
+
+.fa-2xl:hover {
+  color: hsl(221, 40%, 23%);
+}
