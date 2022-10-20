@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"text/template"
 
 	"github.com/gorilla/mux"
@@ -16,7 +17,7 @@ func main() {
 	r.HandleFunc("/", home).Methods("GET")
 	r.HandleFunc("/post-project", home).Methods("GET")
 	r.HandleFunc("/add-project", addProject).Methods("GET")
-	r.HandleFunc("/detail-project", detailProject).Methods("GET")
+	r.HandleFunc("/detail-project/{i}", detailProject).Methods("GET")
 	r.HandleFunc("/contact", contact).Methods("GET")
 	r.HandleFunc("/post-project", postMyProject).Methods("POST")
 
@@ -60,7 +61,13 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl.Execute(w, nil)
+	i, _ := strconv.Atoi(mux.Vars(r)["i"])
+
+	data := map[string]interface{}{
+		"id": i,
+	}
+
+	tmpl.Execute(w, data)
 }
 
 func contact(w http.ResponseWriter, r *http.Request) {
