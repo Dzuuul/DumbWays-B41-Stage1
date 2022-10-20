@@ -1,0 +1,128 @@
+<!-- Moh Dzulfikri Maulana -->
+<!-- B41 Day 7-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/public/css/style.css">
+  <title>My Project</title>
+</head>
+
+<body>
+
+  <header class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
+
+    <div class="container-fluid mx-lg-5 mx-sm-1 py-1">
+      <a class="navbar-brand" href="/">
+        <img src="https://dumbways.id/assets/images/brandred.png" width="49px" alt="Dumbways Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-lg-3 me-sm-3">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add-project">Add Project</a>
+          </li>
+        </ul>
+        <a href="/contact">
+          <button class="btn btn-dark px-3 rounded-3" type="button">Contact Me</button></a>
+        </a>
+      </div>
+    </div>
+
+  </header>
+
+  <section>
+    <div>
+      <h2 class="text-center fw-semibold mb-4" style="margin-top: 13vh;">UPDATE MY PROJECT</h2>
+
+      <form class="container" style="width: 350px;" action="/post-project" method="post">
+        <div class="mb-3">
+          <label for="input-name" class="form-label">Project Name</label>
+          <input name="input-project-name" type="text" id="input-name" class="form-control">
+        </div>
+
+        <div class="container mb-3">
+          <div class="row">
+            <div class="col-6 ps-0 pe-2">
+              <label for="input-start-date" class="form-label mb-1">Start Date</label>
+              <input name="input-start-date" type="text" id="input-start-date" class="form-control"
+                onfocus="(this.type='date')">
+            </div>
+
+            <div class="col-6 pe-0 ps-2">
+              <label for="input-end-date" class="form-label mb-1">End Date</label>
+              <input name="input-end-date" type="text" id="input-end-date" class="form-control"
+                onfocus="(this.type='date')">
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="input-description" class="mb-1">Description</label>
+          <textarea name="input-description" id="input-description" class="form-control" cols="5" rows="4"
+            style="resize: none;"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="" class="form-label mb-0">Technologies</label>
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                <p class="my-1"><input name="check-reactjs" class="form-check-input" type="checkbox" id="input-reactjs"
+                    name="input-reactjs" aria-label="Checkbox for following text input">
+                  <label for="input-reactjs">ReactJs</label>
+                </p>
+                <p class="my-1"><input name="check-vuejs" class="form-check-input" type="checkbox" id="input-vuejs"
+                    name="input-vuejs" aria-label="Checkbox for following text input">
+                  <label for="input-vuejs">VueJs</label>
+                </p>
+              </div>
+              <div class="col-6">
+                <p class="my-1"><input name="check-angular" class="form-check-input" type="checkbox" id="input-angular"
+                    name="input-angular" aria-label="Checkbox for following text input">
+                  <label for="input-angular">Angular</label>
+                </p>
+                <p class="my-1"><input name="check-laravel" class="form-check-input" type="checkbox" id="input-laravel"
+                    name="input-laravel" aria-label="Checkbox for following text input">
+                  <label for="input-laravel">Laravel</label>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="input-upload-image" class="form-label">Upload Image</label>
+          <input class="form-control" type="file" id="input-upload-image">
+        </div>
+
+        <div class="submit-btn mt-5 d-flex justify-content-end">
+          <button class="btn btn-dark px-3 rounded-5">Submit</button>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <script src="/public/js/add-project.js"></script>
+</body>
+
+</html>
