@@ -29,46 +29,56 @@ func main() {
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 
 	r.HandleFunc("/", home).Methods("GET")
-	r.HandleFunc("/detail-project/{i}", detailProject).Methods("GET")
+	r.HandleFunc("/detail-project/{index}", detailProject).Methods("GET")
 	r.HandleFunc("/contact", contact).Methods("GET")
-	r.HandleFunc("/add-project", projectPage).Methods("GET")
-	r.HandleFunc("/update-project", updateProjectPage).Methods("GET")
-	r.HandleFunc("/my-project", submitProject).Methods("POST")
-	r.HandleFunc("/edit-project", editProject).Methods("POST")
-	r.HandleFunc("/delete-project", deleteProject).Methods("GET")
+	r.HandleFunc("/my-project", project).Methods("GET")
+	r.HandleFunc("/form-add-project", formAddProject).Methods("GET")
+	r.HandleFunc("/form-edit-project", formEditProject).Methods("GET")
+	r.HandleFunc("/add-my-project", addProject).Methods("POST")
+	r.HandleFunc("/edit-my-project", editProject).Methods("POST")
+	r.HandleFunc("/delete-project/{index}", deleteProject).Methods("GET")
 
-	fmt.Println("Server is running on port 5678...\t(press \"ctrl + c\" to cancel)")
-	http.ListenAndServe("localhost:5678", r)
+	fmt.Println("Server is running on port 5656...\t(press \"ctrl + c\" to cancel)")
+	http.ListenAndServe("localhost:5656", r)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	tmpl, err := template.ParseFiles("views/home.html")
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
+		return
 	}
 
 	tmpl.Execute(w, nil)
 }
 
-func projectPage(w http.ResponseWriter, r *http.Request) {
+func project(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/my-project.html")
+	var tmpl, err = template.ParseFiles("views/my-project.html")
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
+		return
 	}
 
-	tmpl.Execute(w, nil)
+	resp := map[string]interface{}{
+		"Projects": dataProject,
+	}
+
+	tmpl.Execute(w, resp)
 }
 
 func detailProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/detail-project.html")
+	var tmpl, err = template.ParseFiles("views/detail-project.html")
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
@@ -77,18 +87,19 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 
 	ProjectDetail := Project{}
 
-	index, _ := strconv.Atoi(mux.Vars(r)["i"])
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
 
 	for i, data := range dataProject {
 		if index == i {
 			ProjectDetail = Project{
-				Project_name: data.Project_name,
-				Duration:     data.Duration,
-				Description:  data.Description,
-				React_js:     data.React_js,
-				Vue_js:       data.Vue_js,
-				Angular:      data.Angular,
-				Laravel:      data.Laravel,
+				Project_name:    data.Project_name,
+				Detail_duration: data.Detail_duration,
+				Duration:        data.Duration,
+				Description:     data.Description,
+				React_js:        data.React_js,
+				Vue_js:          data.Vue_js,
+				Angular:         data.Angular,
+				Laravel:         data.Laravel,
 			}
 		}
 	}
@@ -103,16 +114,18 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/contact-me.html")
+	var tmpl, err = template.ParseFiles("views/contact-me.html")
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
+		return
 	}
 
 	tmpl.Execute(w, nil)
 }
 
-func submitProject(w http.ResponseWriter, r *http.Request) {
+func addProject(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
@@ -123,10 +136,10 @@ func submitProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	checkReactJs := r.PostForm.Get("check-reactjs")
-	checkVueJs := r.PostForm.Get("check-vuejs")
-	checkAngular := r.PostForm.Get("check-angular")
-	checkLaravel := r.PostForm.Get("check-laravel")
+	detailReactJs := r.PostForm.Get("check-reactjs")
+	detailVueJs := r.PostForm.Get("check-vuejs")
+	detailAngular := r.PostForm.Get("check-angular")
+	detailLaravel := r.PostForm.Get("check-laravel")
 
 	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
@@ -151,85 +164,119 @@ func submitProject(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("\nDuration\t\t= %v\n", inputDuration)
 
-	switch checkReactJs {
+	switch detailReactJs {
 	case "on":
-		checkReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
+		detailReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
 	default:
-		checkReactJs = ""
+		detailReactJs = ""
 	}
-	switch checkVueJs {
+	switch detailVueJs {
 	case "on":
-		checkVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
+		detailVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
 	default:
-		checkVueJs = ""
+		detailVueJs = ""
 	}
-	switch checkAngular {
+	switch detailAngular {
 	case "on":
-		checkAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
+		detailAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
 	default:
-		checkAngular = ""
+		detailAngular = ""
 	}
-	switch checkLaravel {
+	switch detailLaravel {
 	case "on":
-		checkLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
+		detailLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
 	default:
-		checkLaravel = ""
+		detailLaravel = ""
 	}
 
 	fmt.Println("______")
 	fmt.Println("Form Result :")
 	fmt.Printf("\nProject Name\t: %v\n\nDuration\t: %v\n\nDescription\t:\n%v\n\n", inputProjectName, inputDuration, inputDescription)
 	fmt.Println("Technologies\t:")
-	if checkReactJs != "" {
+	if detailReactJs != "" {
 		fmt.Printf("  ✔ React Js ✔ ")
 	}
-	if checkVueJs != "" {
+	if detailVueJs != "" {
 		fmt.Printf("  ✔ Vue Js ✔ ")
 	}
-	if checkAngular != "" {
+	if detailAngular != "" {
 		fmt.Printf("  ✔ Angular ✔ ")
 	}
-	if checkLaravel != "" {
+	if detailLaravel != "" {
 		fmt.Printf("  ✔ Laravel  ✔ ")
 	}
 	fmt.Println("\n\n______")
 
-	addProject := Project{
+	newProject := Project{
 		Project_name:    inputProjectName,
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
-		React_js:        checkReactJs,
-		Vue_js:          checkVueJs,
-		Angular:         checkAngular,
-		Laravel:         checkLaravel,
+		React_js:        detailReactJs,
+		Vue_js:          detailVueJs,
+		Angular:         detailAngular,
+		Laravel:         detailLaravel,
 	}
 
-	dataProject = append(dataProject, addProject)
+	dataProject = append(dataProject, newProject)
 
 	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
 }
 
-func updateProjectPage(w http.ResponseWriter, r *http.Request) {
+func formAddProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/update-project.html")
+	var tmpl, err = template.ParseFiles("views/add-my-project.html")
+
+	if err != nil {
+		w.Write([]byte("error message : " + err.Error()))
+		return
+	}
+
+	tmpl.Execute(w, nil)
+}
+
+func formEditProject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	var tmpl, err = template.ParseFiles("views/update-project.html")
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
+		return
 	}
 
-	i, _ := strconv.Atoi(mux.Vars(r)["i"])
+	edit := Project{}
+
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
+
+	for i, data := range dataProject {
+		if index == i {
+			edit = Project{
+				Project_name:    data.Project_name,
+				Detail_duration: data.Detail_duration,
+				Duration:        data.Duration,
+				Description:     data.Description,
+				React_js:        data.React_js,
+				Vue_js:          data.Vue_js,
+				Angular:         data.Angular,
+				Laravel:         data.Laravel,
+			}
+		}
+	}
 
 	data := map[string]interface{}{
-		"id": i,
+		"Index": index,
+		"Edit":  edit,
 	}
 
 	tmpl.Execute(w, data)
+	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
 }
 
 func editProject(w http.ResponseWriter, r *http.Request) {
-	i, _ := strconv.Atoi(mux.Vars(r)["i"])
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
@@ -240,10 +287,10 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	checkReactJs := r.PostForm.Get("check-reactjs")
-	checkVueJs := r.PostForm.Get("check-vuejs")
-	checkAngular := r.PostForm.Get("check-angular")
-	checkLaravel := r.PostForm.Get("check-laravel")
+	detailReactJs := r.PostForm.Get("check-reactjs")
+	detailVueJs := r.PostForm.Get("check-vuejs")
+	detailAngular := r.PostForm.Get("check-angular")
+	detailLaravel := r.PostForm.Get("check-laravel")
 
 	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
@@ -268,45 +315,45 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("\nDuration\t\t= %v\n", inputDuration)
 
-	switch checkReactJs {
+	switch detailReactJs {
 	case "on":
-		checkReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
+		detailReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
 	default:
-		checkReactJs = ""
+		detailReactJs = ""
 	}
-	switch checkVueJs {
+	switch detailVueJs {
 	case "on":
-		checkVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
+		detailVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
 	default:
-		checkVueJs = ""
+		detailVueJs = ""
 	}
-	switch checkAngular {
+	switch detailAngular {
 	case "on":
-		checkAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
+		detailAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
 	default:
-		checkAngular = ""
+		detailAngular = ""
 	}
-	switch checkLaravel {
+	switch detailLaravel {
 	case "on":
-		checkLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
+		detailLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
 	default:
-		checkLaravel = ""
+		detailLaravel = ""
 	}
 
 	fmt.Println("______")
 	fmt.Println("Form Result :")
 	fmt.Printf("\nProject Name\t: %v\n\nDuration\t: %v\n\nDescription\t:\n%v\n\n", inputProjectName, inputDuration, inputDescription)
 	fmt.Println("Technologies\t:")
-	if checkReactJs != "" {
+	if detailReactJs != "" {
 		fmt.Printf("  ✔ React Js ✔ ")
 	}
-	if checkVueJs != "" {
+	if detailVueJs != "" {
 		fmt.Printf("  ✔ Vue Js ✔ ")
 	}
-	if checkAngular != "" {
+	if detailAngular != "" {
 		fmt.Printf("  ✔ Angular ✔ ")
 	}
-	if checkLaravel != "" {
+	if detailLaravel != "" {
 		fmt.Printf("  ✔ Laravel  ✔ ")
 	}
 	fmt.Println("\n\n______")
@@ -316,22 +363,22 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
-		React_js:        checkReactJs,
-		Vue_js:          checkVueJs,
-		Angular:         checkAngular,
-		Laravel:         checkLaravel,
+		React_js:        detailReactJs,
+		Vue_js:          detailVueJs,
+		Angular:         detailAngular,
+		Laravel:         detailLaravel,
 	}
 
-	dataProject[i] = updateProject
+	dataProject[index] = updateProject
 
 	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
 
 }
 
 func deleteProject(w http.ResponseWriter, r *http.Request) {
-	i, _ := strconv.Atoi(mux.Vars(r)["i"])
+	index, _ := strconv.Atoi(mux.Vars(r)["index"])
 
-	dataProject = append(dataProject[:i], dataProject[i+1:]...)
+	dataProject = append(dataProject[:index], dataProject[index+1:]...)
 
 	http.Redirect(w, r, "/my-project", http.StatusFound)
 }

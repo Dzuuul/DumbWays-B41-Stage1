@@ -1,5 +1,5 @@
 <!-- Moh Dzulfikri Maulana -->
-<!-- B41 Day 7 -->
+<!-- B41 Day 8 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +41,7 @@
             <a class="nav-link active fw-bold" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/add-project">Add Project</a>
+            <a class="nav-link" href="/form-add-project">Add Project</a>
           </li>
         </ul>
         <a href="/contact">
@@ -114,6 +114,7 @@
         <div id="contents"
           class="row d-flex flex-wrap justify-content-lg-start justify-content-md-start justify-content-sm-center"
           style="width: 985px;">
+          {{range $index, $data := .Projects}}
 
           <!-- card -->
           <div class="col-lg-4 col-md-6 col-sm-12 d-flex px-1">
@@ -126,34 +127,32 @@
                 </div>
               </div>
               <div class="card-body pt-2 d-flex flex-column">
-                <a href="/detail-project/0" href="/detail-project" class="text-dark" style="text-decoration: none;">
-                  <h5 class="card-title fw-bold">Dummy Title 1</h5>
+                <a href="/detail-project/{{$index}}" class="text-dark" style="text-decoration: none;">
+                  <h5 class="card-title fw-bold">{{$data.Project_name}}</h5>
                 </a>
-                <p class="mt-0" style="margin-bottom: 20px;">durasi : 3 months</p>
+                <p class="mt-0" style="margin-bottom: 20px;">durasi : {{$data.Duration}}</p>
                 <div class="text-wrap overflow-hidden mb-4" style="height: 72px;">
-                  <p class="card-text">App that use for dumbways student, it was deployed and
-                    can
-                    downloaded on
-                    playstore.<br>Happy
-                    download.</p>
+                  <p class="card-text">{{$data.Description}}</p>
                 </div>
                 <div class="d-flex flex-column mt-auto">
                   <div class="container">
-                    <i class="fa-brands fa-react fa-xl ms-0"></i>
-                    <i class="fa-brands fa-vuejs fa-xl ms-2"></i>
-                    <i class="fa-brands fa-angular fa-xl ms-2"></i>
-                    <i class="fa-brands fa-laravel fa-xl ms-2"></i>
+                    {{$data.React_js}}
+                    {{$data.Vue_js}}
+                    {{$data.Angular}}
+                    {{$data.Laravel}}
                   </div>
                   <div class="container m-0 pt-3 text-center">
                     <div class="row justify-content-between">
-                      <a href="/update-project/0" class="btn btn-dark col-5" style="width: 47%; ">Edit</a>
-                      <a href="/delete-project/0" class="btn btn-dark col-5" style="width: 47%;">Delete</a>
+                      <a href="/form-edit-project" class="btn btn-dark col-5" style="width: 47%; ">Edit</a>
+                      <a href="/delete-project/{{$index}}" class="btn btn-dark col-5" style="width: 47%;">Delete</a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {{end}}
 
 
         </div>
