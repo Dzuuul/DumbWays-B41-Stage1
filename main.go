@@ -20,6 +20,10 @@ type Project struct {
 	Vue_js          string
 	Angular         string
 	Laravel         string
+	Icon_react_js   string
+	Icon_vue_js     string
+	Icon_angular    string
+	Icon_laravel    string
 }
 
 var dataProject = []Project{}
@@ -136,10 +140,10 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	detailReactJs := r.PostForm.Get("check-reactjs")
-	detailVueJs := r.PostForm.Get("check-vuejs")
-	detailAngular := r.PostForm.Get("check-angular")
-	detailLaravel := r.PostForm.Get("check-laravel")
+	detailReactJs, cardReactJs := r.PostForm.Get("check-reactjs"), r.PostForm.Get("check-reactjs")
+	detailVueJs, cardVueJs := r.PostForm.Get("check-vuejs"), r.PostForm.Get("check-vuejs")
+	detailAngular, cardAngular := r.PostForm.Get("check-angular"), r.PostForm.Get("check-angular")
+	detailLaravel, cardLaravel := r.PostForm.Get("check-laravel"), r.PostForm.Get("check-laravel")
 
 	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
@@ -189,6 +193,31 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		detailLaravel = ""
 	}
 
+	switch cardReactJs {
+	case "on":
+		cardReactJs = `<i class="fa-brands fa-react fa-xl me-2"></i>`
+	default:
+		cardReactJs = ""
+	}
+	switch cardVueJs {
+	case "on":
+		cardVueJs = `<i class="fa-brands fa-vuejs fa-xl me-2"></i>`
+	default:
+		cardVueJs = ""
+	}
+	switch cardAngular {
+	case "on":
+		cardAngular = `<i class="fa-brands fa-angular fa-xl me-2"></i>`
+	default:
+		cardAngular = ""
+	}
+	switch cardLaravel {
+	case "on":
+		cardLaravel = `<i class="fa-brands fa-laravel fa-xl me-2"></i>`
+	default:
+		cardLaravel = ""
+	}
+
 	fmt.Println("______")
 	fmt.Println("Form Result :")
 	fmt.Printf("\nProject Name\t: %v\n\nDuration\t: %v\n\nDescription\t:\n%v\n\n", inputProjectName, inputDuration, inputDescription)
@@ -216,6 +245,10 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		Vue_js:          detailVueJs,
 		Angular:         detailAngular,
 		Laravel:         detailLaravel,
+		Icon_react_js:   cardReactJs,
+		Icon_vue_js:     cardVueJs,
+		Icon_angular:    cardAngular,
+		Icon_laravel:    cardLaravel,
 	}
 
 	dataProject = append(dataProject, newProject)
@@ -287,10 +320,10 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	detailReactJs := r.PostForm.Get("check-reactjs")
-	detailVueJs := r.PostForm.Get("check-vuejs")
-	detailAngular := r.PostForm.Get("check-angular")
-	detailLaravel := r.PostForm.Get("check-laravel")
+	detailReactJs, cardReactJs := r.PostForm.Get("check-reactjs"), r.PostForm.Get("check-reactjs")
+	detailVueJs, cardVueJs := r.PostForm.Get("check-vuejs"), r.PostForm.Get("check-vuejs")
+	detailAngular, cardAngular := r.PostForm.Get("check-angular"), r.PostForm.Get("check-angular")
+	detailLaravel, cardLaravel := r.PostForm.Get("check-laravel"), r.PostForm.Get("check-laravel")
 
 	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
@@ -340,7 +373,31 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 		detailLaravel = ""
 	}
 
-	fmt.Println("______")
+	switch cardReactJs {
+	case "on":
+		cardReactJs = `<i class="fa-brands fa-react fa-xl me-2"></i>`
+	default:
+		cardReactJs = ""
+	}
+	switch cardVueJs {
+	case "on":
+		cardVueJs = `<i class="fa-brands fa-vuejs fa-xl me-2"></i>`
+	default:
+		cardVueJs = ""
+	}
+	switch cardAngular {
+	case "on":
+		cardAngular = `<i class="fa-brands fa-angular fa-xl me-2"></i>`
+	default:
+		cardAngular = ""
+	}
+	switch cardLaravel {
+	case "on":
+		cardLaravel = `<i class="fa-brands fa-laravel fa-xl me-2"></i>`
+	default:
+		cardLaravel = ""
+	}
+
 	fmt.Println("Form Result :")
 	fmt.Printf("\nProject Name\t: %v\n\nDuration\t: %v\n\nDescription\t:\n%v\n\n", inputProjectName, inputDuration, inputDescription)
 	fmt.Println("Technologies\t:")
@@ -356,7 +413,6 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	if detailLaravel != "" {
 		fmt.Printf("  ✔ Laravel  ✔ ")
 	}
-	fmt.Println("\n\n______")
 
 	updateProject := Project{
 		Project_name:    inputProjectName,
@@ -367,6 +423,10 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 		Vue_js:          detailVueJs,
 		Angular:         detailAngular,
 		Laravel:         detailLaravel,
+		Icon_react_js:   cardReactJs,
+		Icon_vue_js:     cardVueJs,
+		Icon_angular:    cardAngular,
+		Icon_laravel:    cardLaravel,
 	}
 
 	dataProject[index] = updateProject
