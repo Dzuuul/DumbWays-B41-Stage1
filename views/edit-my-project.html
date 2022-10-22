@@ -53,10 +53,10 @@
     <div>
       <h2 class="text-center fw-semibold mb-4" style="margin-top: 13vh;">UPDATE MY PROJECT</h2>
 
-      <form class="container" style="width: 350px;" action="/edit-project" method="post">
+      <form class="container" style="width: 350px;" action="/edit-my-project" method="post">
         <div class="mb-3">
           <label for="input-name" class="form-label">Project Name</label>
-          <input name="input-project-name" type="text" id="input-name" class="form-control">
+          <input name="input-project-name" type="text" id="input-name" class="form-control" value="{{.Edit.Project_name}}">
         </div>
 
         <div class="container mb-3">

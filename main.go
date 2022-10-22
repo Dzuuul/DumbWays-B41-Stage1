@@ -140,10 +140,15 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	detailReactJs, cardReactJs := r.PostForm.Get("check-reactjs"), r.PostForm.Get("check-reactjs")
-	detailVueJs, cardVueJs := r.PostForm.Get("check-vuejs"), r.PostForm.Get("check-vuejs")
-	detailAngular, cardAngular := r.PostForm.Get("check-angular"), r.PostForm.Get("check-angular")
-	detailLaravel, cardLaravel := r.PostForm.Get("check-laravel"), r.PostForm.Get("check-laravel")
+	rjs := r.PostForm.Get("check-reactjs")
+	vjs := r.PostForm.Get("check-vuejs")
+	ang := r.PostForm.Get("check-angular")
+	lar := r.PostForm.Get("check-laravel")
+
+	detailReactJs, cardReactJs := rjs, rjs
+	detailVueJs, cardVueJs := vjs, vjs
+	detailAngular, cardAngular := ang, ang
+	detailLaravel, cardLaravel := lar, lar
 
 	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
@@ -272,7 +277,7 @@ func formAddProject(w http.ResponseWriter, r *http.Request) {
 func formEditProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	var tmpl, err = template.ParseFiles("views/update-project.html")
+	var tmpl, err = template.ParseFiles("views/edit-my-project.html")
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -320,10 +325,15 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	detailReactJs, cardReactJs := r.PostForm.Get("check-reactjs"), r.PostForm.Get("check-reactjs")
-	detailVueJs, cardVueJs := r.PostForm.Get("check-vuejs"), r.PostForm.Get("check-vuejs")
-	detailAngular, cardAngular := r.PostForm.Get("check-angular"), r.PostForm.Get("check-angular")
-	detailLaravel, cardLaravel := r.PostForm.Get("check-laravel"), r.PostForm.Get("check-laravel")
+	rjs := r.PostForm.Get("check-reactjs")
+	vjs := r.PostForm.Get("check-vuejs")
+	ang := r.PostForm.Get("check-angular")
+	lar := r.PostForm.Get("check-laravel")
+
+	detailReactJs, cardReactJs := rjs, rjs
+	detailVueJs, cardVueJs := vjs, vjs
+	detailAngular, cardAngular := ang, ang
+	detailLaravel, cardLaravel := lar, lar
 
 	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
