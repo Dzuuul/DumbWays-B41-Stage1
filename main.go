@@ -27,6 +27,10 @@ type Project struct {
 	Icon_vue_js     string
 	Icon_angular    string
 	Icon_laravel    string
+	Status_react_js string
+	Status_vue_js   string
+	Status_angular  string
+	Status_laravel  string
 }
 
 var dataProject = []Project{}
@@ -190,29 +194,42 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		inputDuration = "WRONG DATE!"
 	}
 
+	var statusReactJs string
+	var statusVueJs string
+	var statusAngular string
+	var statusLaravel string
+
 	switch detailReactJs {
 	case "on":
 		detailReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
+		statusReactJs = "checked"
 	default:
 		detailReactJs = ""
+		statusReactJs = ""
 	}
 	switch detailVueJs {
 	case "on":
 		detailVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
+		statusVueJs = "checked"
 	default:
 		detailVueJs = ""
+		statusVueJs = ""
 	}
 	switch detailAngular {
 	case "on":
 		detailAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
+		statusAngular = "checked"
 	default:
 		detailAngular = ""
+		statusAngular = ""
 	}
 	switch detailLaravel {
 	case "on":
 		detailLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
+		statusLaravel = "checked"
 	default:
 		detailLaravel = ""
+		statusLaravel = ""
 	}
 
 	switch cardReactJs {
@@ -255,6 +272,10 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		Icon_vue_js:     cardVueJs,
 		Icon_angular:    cardAngular,
 		Icon_laravel:    cardLaravel,
+		Status_react_js: statusReactJs,
+		Status_vue_js:   statusVueJs,
+		Status_angular:  statusAngular,
+		Status_laravel:  statusLaravel,
 	}
 
 	dataProject = append(dataProject, newProject)
@@ -303,6 +324,10 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 				Vue_js:          data.Vue_js,
 				Angular:         data.Angular,
 				Laravel:         data.Laravel,
+				Status_react_js: data.Status_react_js,
+				Status_vue_js:   data.Status_vue_js,
+				Status_angular:  data.Status_angular,
+				Status_laravel:  data.Status_laravel,
 			}
 		}
 	}
