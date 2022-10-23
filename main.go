@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"text/template"
@@ -13,6 +14,8 @@ import (
 
 type Project struct {
 	Project_name    string
+	Start_date      string
+	End_date        string
 	Detail_duration string
 	Duration        string
 	Description     string
@@ -33,16 +36,16 @@ func main() {
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 
 	r.HandleFunc("/", home).Methods("GET")
-	r.HandleFunc("/detail-project/{index}", detailProject).Methods("GET")
 	r.HandleFunc("/contact", contact).Methods("GET")
 	r.HandleFunc("/my-project", project).Methods("GET")
 	r.HandleFunc("/form-add-project", formAddProject).Methods("GET")
-	r.HandleFunc("/form-edit-project", formEditProject).Methods("GET")
-	r.HandleFunc("/add-my-project", addProject).Methods("POST")
-	r.HandleFunc("/edit-my-project", editProject).Methods("POST")
+	r.HandleFunc("/form-edit-project/{index}", formEditProject).Methods("GET")
+	r.HandleFunc("/detail-project/{index}", detailProject).Methods("GET")
 	r.HandleFunc("/delete-project/{index}", deleteProject).Methods("GET")
+	r.HandleFunc("/add-my-project", addProject).Methods("POST")
+	r.HandleFunc("/edit-my-project/{index}", editProject).Methods("POST")
 
-	fmt.Println("Server is running on port 5656...\t(press \"ctrl + c\" to cancel)")
+	fmt.Println("Server is running on port 5656...\t(press \"ctrl + c\" to abort)")
 	http.ListenAndServe("localhost:5656", r)
 }
 
@@ -150,28 +153,42 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 	detailAngular, cardAngular := ang, ang
 	detailLaravel, cardLaravel := lar, lar
 
-	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
-	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
+	parseStartDate, _ := time.Parse("2006-01-02", inputStartDate)
+	parseEndDate, _ := time.Parse("2006-01-02", inputEndDate)
 
-	formatStartDate := timeStartDate.Format("2 Jan 2006")
-	formatEndDate := timeEndDate.Format("2 Jan 2006")
+	hour := parseEndDate.Sub(parseStartDate).Hours()
+	day := hour / 24
+	week := math.Round(day / 7)
+	month := math.Round(day / 30)
+	year := math.Round(day / 365)
 
-	dateDifference := timeEndDate.Sub(timeStartDate)
-	dayDuration := int64(dateDifference.Hours() / 24)
+	formatStartDate := parseStartDate.Format("2 Jan 2006")
+	formatEndDate := parseEndDate.Format("2 Jan 2006")
 
 	inputDetailDuration := formatStartDate + " - " + formatEndDate
-	inputDuration := duration(int(dayDuration))
 
-	fmt.Printf("\nCalculate Duration\t:= %v\n", inputDetailDuration)
-	fmt.Printf("\nDate Difference\t\t:= %v\n", dateDifference)
+	var inputDuration string
 
-	if dayDuration == 1 {
-		fmt.Printf("\nDay Duration\t\t= %v day\n", dayDuration)
-	} else {
-		fmt.Printf("\nDay Duration\t\t= %v days\n", dayDuration)
+	switch {
+	case year == 1:
+		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " year"
+	case year > 1:
+		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " years"
+	case month == 1:
+		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " month"
+	case month > 1:
+		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " months"
+	case week == 1:
+		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " week"
+	case week > 1:
+		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " weeks"
+	case day == 1:
+		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " day"
+	case day > 1:
+		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " days"
+	default:
+		inputDuration = "WRONG DATE!"
 	}
-
-	fmt.Printf("\nDuration\t\t= %v\n", inputDuration)
 
 	switch detailReactJs {
 	case "on":
@@ -223,26 +240,10 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		cardLaravel = ""
 	}
 
-	fmt.Println("______")
-	fmt.Println("Form Result :")
-	fmt.Printf("\nProject Name\t: %v\n\nDuration\t: %v\n\nDescription\t:\n%v\n\n", inputProjectName, inputDuration, inputDescription)
-	fmt.Println("Technologies\t:")
-	if detailReactJs != "" {
-		fmt.Printf("  ✔ React Js ✔ ")
-	}
-	if detailVueJs != "" {
-		fmt.Printf("  ✔ Vue Js ✔ ")
-	}
-	if detailAngular != "" {
-		fmt.Printf("  ✔ Angular ✔ ")
-	}
-	if detailLaravel != "" {
-		fmt.Printf("  ✔ Laravel  ✔ ")
-	}
-	fmt.Println("\n\n______")
-
 	newProject := Project{
 		Project_name:    inputProjectName,
+		Start_date:      inputStartDate,
+		End_date:        inputEndDate,
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
@@ -293,6 +294,8 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 		if index == i {
 			edit = Project{
 				Project_name:    data.Project_name,
+				Start_date:      data.Start_date,
+				End_date:        data.End_date,
 				Detail_duration: data.Detail_duration,
 				Duration:        data.Duration,
 				Description:     data.Description,
@@ -335,28 +338,42 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	detailAngular, cardAngular := ang, ang
 	detailLaravel, cardLaravel := lar, lar
 
-	timeStartDate, _ := time.Parse("2006-01-02", inputStartDate)
-	timeEndDate, _ := time.Parse("2006-01-02", inputEndDate)
+	parseStartDate, _ := time.Parse("2006-01-02", inputStartDate)
+	parseEndDate, _ := time.Parse("2006-01-02", inputEndDate)
 
-	formatStartDate := timeStartDate.Format("2 Jan 2006")
-	formatEndDate := timeEndDate.Format("2 Jan 2006")
+	hour := parseEndDate.Sub(parseStartDate).Hours()
+	day := hour / 24
+	week := math.Round(day / 7)
+	month := math.Round(day / 30)
+	year := math.Round(day / 365)
 
-	dateDifference := timeEndDate.Sub(timeStartDate)
-	dayDuration := int64(dateDifference.Hours() / 24)
+	formatStartDate := parseStartDate.Format("2 Jan 2006")
+	formatEndDate := parseEndDate.Format("2 Jan 2006")
 
 	inputDetailDuration := formatStartDate + " - " + formatEndDate
-	inputDuration := duration(int(dayDuration))
 
-	fmt.Printf("\nDetail Duration\t:= %v\n", inputDetailDuration)
-	fmt.Printf("\nDate Difference\t\t:= %v\n", dateDifference)
+	var inputDuration string
 
-	if dayDuration == 1 {
-		fmt.Printf("\nDay Duration\t\t= %v day\n", dayDuration)
-	} else {
-		fmt.Printf("\nDay Duration\t\t= %v days\n", dayDuration)
+	switch {
+	case year == 1:
+		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " year"
+	case year > 1:
+		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " years"
+	case month == 1:
+		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " month"
+	case month > 1:
+		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " months"
+	case week == 1:
+		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " week"
+	case week > 1:
+		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " weeks"
+	case day == 1:
+		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " day"
+	case day > 1:
+		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " days"
+	default:
+		inputDuration = "WRONG DATE!"
 	}
-
-	fmt.Printf("\nDuration\t\t= %v\n", inputDuration)
 
 	switch detailReactJs {
 	case "on":
@@ -408,24 +425,10 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 		cardLaravel = ""
 	}
 
-	fmt.Println("Form Result :")
-	fmt.Printf("\nProject Name\t: %v\n\nDuration\t: %v\n\nDescription\t:\n%v\n\n", inputProjectName, inputDuration, inputDescription)
-	fmt.Println("Technologies\t:")
-	if detailReactJs != "" {
-		fmt.Printf("  ✔ React Js ✔ ")
-	}
-	if detailVueJs != "" {
-		fmt.Printf("  ✔ Vue Js ✔ ")
-	}
-	if detailAngular != "" {
-		fmt.Printf("  ✔ Angular ✔ ")
-	}
-	if detailLaravel != "" {
-		fmt.Printf("  ✔ Laravel  ✔ ")
-	}
-
 	updateProject := Project{
 		Project_name:    inputProjectName,
+		Start_date:      inputStartDate,
+		End_date:        inputEndDate,
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
@@ -451,41 +454,4 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 	dataProject = append(dataProject[:index], dataProject[index+1:]...)
 
 	http.Redirect(w, r, "/my-project", http.StatusFound)
-}
-
-func duration(d int) string {
-	dItoa := strconv.Itoa(int(d))
-
-	if d == 1 || d == 0 {
-		return dItoa + " day"
-	} else if d < 0 {
-		return "-"
-	} else if d > 1 && d < 7 {
-		return dItoa + " days"
-	} else if d == 7 {
-		weekD := d / 7
-		weekDItoa := strconv.Itoa(int(weekD))
-		return weekDItoa + " week"
-	} else if d > 7 && d < 30 {
-		weekD := d / 7
-		weekDItoa := strconv.Itoa(int(weekD))
-		return weekDItoa + " weeks"
-	} else if d == 30 {
-		monthD := d / 30
-		monthDItoa := strconv.Itoa(int(monthD))
-		return monthDItoa + " month"
-	} else if d > 30 && d < 365 {
-		monthD := d / 30
-		monthDItoa := strconv.Itoa(int(monthD))
-		return monthDItoa + " months"
-	} else if d == 365 {
-		yearD := d / 365
-		yearDItoa := strconv.Itoa(int(yearD))
-		return yearDItoa + " year"
-	} else if d > 365 {
-		yearD := d / 365
-		yearDItoa := strconv.Itoa(int(yearD))
-		return yearDItoa + " years"
-	}
-	return dItoa
 }

@@ -53,7 +53,7 @@
     <div>
       <h2 class="text-center fw-semibold mb-4" style="margin-top: 13vh;">UPDATE MY PROJECT</h2>
 
-      <form class="container" style="width: 350px;" action="/edit-my-project" method="post">
+      <form class="container" style="width: 350px;" action="/edit-my-project/{{.Index}}" method="post">
         <div class="mb-3">
           <label for="input-name" class="form-label">Project Name</label>
           <input name="input-project-name" type="text" id="input-name" class="form-control" value="{{.Edit.Project_name}}">
@@ -63,14 +63,12 @@
           <div class="row">
             <div class="col-6 ps-0 pe-2">
               <label for="input-start-date" class="form-label mb-1">Start Date</label>
-              <input name="input-start-date" type="text" id="input-start-date" class="form-control"
-                onfocus="(this.type='date')">
+              <input name="input-start-date" type="date" id="input-start-date" class="form-control" value="{{.Edit.Start_date}}">
             </div>
 
             <div class="col-6 pe-0 ps-2">
               <label for="input-end-date" class="form-label mb-1">End Date</label>
-              <input name="input-end-date" type="text" id="input-end-date" class="form-control"
-                onfocus="(this.type='date')">
+              <input name="input-end-date" type="date" id="input-end-date" class="form-control" value="{{.Edit.End_date}}">
             </div>
           </div>
         </div>
@@ -78,7 +76,7 @@
         <div class="mb-3">
           <label for="input-description" class="mb-1">Description</label>
           <textarea name="input-description" id="input-description" class="form-control" cols="5" rows="4"
-            style="resize: none;"></textarea>
+            style="resize: none;">{{.Edit.Description}}</textarea>
         </div>
 
         <div class="mb-3">
