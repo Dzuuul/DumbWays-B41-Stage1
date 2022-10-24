@@ -40,7 +40,7 @@ func main() {
 
 	r.HandleFunc("/", home).Methods("GET")
 	r.HandleFunc("/contact", contact).Methods("GET")
-	r.HandleFunc("/my-project", project).Methods("GET")
+	r.HandleFunc("/home", project).Methods("GET")
 	r.HandleFunc("/form-add-project", formAddProject).Methods("GET")
 	r.HandleFunc("/form-edit-project/{index}", formEditProject).Methods("GET")
 	r.HandleFunc("/detail-project/{index}", detailProject).Methods("GET")
@@ -55,7 +55,7 @@ func main() {
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/home.html")
+	tmpl, err := template.ParseFiles("views/index.html")
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -69,7 +69,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 func project(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	var tmpl, err = template.ParseFiles("views/my-project.html")
+	var tmpl, err = template.ParseFiles("views/home.html")
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -279,7 +279,7 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 
 	dataProject = append(dataProject, newProject)
 
-	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func formAddProject(w http.ResponseWriter, r *http.Request) {
@@ -337,7 +337,7 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.Execute(w, data)
-	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func editProject(w http.ResponseWriter, r *http.Request) {
@@ -468,7 +468,7 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 
 	dataProject[index] = updateProject
 
-	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 
 }
 
@@ -477,5 +477,5 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 
 	dataProject = append(dataProject[:index], dataProject[index+1:]...)
 
-	http.Redirect(w, r, "/my-project", http.StatusFound)
+	http.Redirect(w, r, "/home", http.StatusFound)
 }
