@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"math"
 	"net/http"
 	"strconv"
 	"text/template"
@@ -162,9 +161,9 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 
 	hour := parseEndDate.Sub(parseStartDate).Hours()
 	day := hour / 24
-	week := math.Round(day / 7)
-	month := math.Round(day / 30)
-	year := math.Round(day / 365)
+	week := day / 7
+	month := day / 30
+	year := day / 365
 
 	formatStartDate := parseStartDate.Format("2 Jan 2006")
 	formatEndDate := parseEndDate.Format("2 Jan 2006")
@@ -368,9 +367,9 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 
 	hour := parseEndDate.Sub(parseStartDate).Hours()
 	day := hour / 24
-	week := math.Round(day / 7)
-	month := math.Round(day / 30)
-	year := math.Round(day / 365)
+	week := day / 7
+	month := day / 30
+	year := day / 365
 
 	formatStartDate := parseStartDate.Format("2 Jan 2006")
 	formatEndDate := parseEndDate.Format("2 Jan 2006")
