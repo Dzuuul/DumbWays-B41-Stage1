@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"day-9/connection"
 	"fmt"
 	"log"
@@ -14,9 +15,10 @@ import (
 )
 
 type Project struct {
+	Id              int
 	Project_name    string
-	Start_date      string
-	End_date        string
+	Start_date      time.Time
+	End_date        time.Time
 	Detail_duration string
 	Duration        string
 	Description     string
@@ -82,11 +84,28 @@ func project(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := map[string]interface{}{
-		"Projects": dataProject,
+	data, _ := connection.Conn.Query(context.Background(), "SELECT id, name, duration, description FROM tb_projects ORDER BY id DESC")
+
+	var result []Project
+	for data.Next() {
+		var each = Project{}
+
+		err = data.Scan(&each.Id, &each.Project_name, &each.Duration, &each.Description)
+
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		result = append(result, each)
 	}
 
-	tmpl.Execute(w, resp)
+	respData := map[string]interface{}{
+		"Projects": result,
+	}
+
+	w.WriteHeader(http.StatusOK)
+	tmpl.Execute(w, respData)
 }
 
 func detailProject(w http.ResponseWriter, r *http.Request) {
@@ -150,6 +169,8 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 	inputStartDate := r.PostForm.Get("input-start-date")
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
+
+	fmt.Println(inputStartDate)
 
 	rjs := r.PostForm.Get("check-reactjs")
 	vjs := r.PostForm.Get("check-vuejs")
@@ -263,8 +284,8 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 
 	newProject := Project{
 		Project_name:    inputProjectName,
-		Start_date:      inputStartDate,
-		End_date:        inputEndDate,
+		Start_date:      parseStartDate,
+		End_date:        parseEndDate,
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
@@ -456,8 +477,8 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 
 	updateProject := Project{
 		Project_name:    inputProjectName,
-		Start_date:      inputStartDate,
-		End_date:        inputEndDate,
+		Start_date:      parseStartDate,
+		End_date:        parseEndDate,
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
