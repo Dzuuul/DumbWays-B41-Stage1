@@ -22,18 +22,7 @@ type Project struct {
 	Detail_duration string
 	Duration        string
 	Description     string
-	React_js        string
-	Vue_js          string
-	Angular         string
-	Laravel         string
-	Icon_react_js   string
-	Icon_vue_js     string
-	Icon_angular    string
-	Icon_laravel    string
-	Status_react_js string
-	Status_vue_js   string
-	Status_angular  string
-	Status_laravel  string
+	Technologies    []string
 }
 
 var dataProject = []Project{}
@@ -45,9 +34,9 @@ func main() {
 
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 
-	r.HandleFunc("/", home).Methods("GET")
+	r.HandleFunc("/", index).Methods("GET")
 	r.HandleFunc("/contact", contact).Methods("GET")
-	r.HandleFunc("/my-project", project).Methods("GET")
+	r.HandleFunc("/home", project).Methods("GET")
 	r.HandleFunc("/form-add-project", formAddProject).Methods("GET")
 	r.HandleFunc("/form-edit-project/{index}", formEditProject).Methods("GET")
 	r.HandleFunc("/detail-project/{index}", detailProject).Methods("GET")
@@ -59,10 +48,10 @@ func main() {
 	http.ListenAndServe("localhost:5656", r)
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/home.html")
+	tmpl, err := template.ParseFiles("views/index.html")
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -76,7 +65,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 func project(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	var tmpl, err = template.ParseFiles("views/my-project.html")
+	var tmpl, err = template.ParseFiles("views/home.html")
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -84,13 +73,13 @@ func project(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, _ := connection.Conn.Query(context.Background(), "SELECT id, name, duration, description FROM tb_projects ORDER BY id DESC")
+	data, _ := connection.Conn.Query(context.Background(), "SELECT id, name, duration, description, technologies FROM tb_projects ORDER BY id DESC")
 
 	var result []Project
 	for data.Next() {
 		var each = Project{}
 
-		err = data.Scan(&each.Id, &each.Project_name, &each.Duration, &each.Description)
+		err = data.Scan(&each.Id, &each.Project_name, &each.Duration, &each.Description, &each.Technologies)
 
 		if err != nil {
 			fmt.Println(err.Error())
@@ -130,10 +119,6 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 				Detail_duration: data.Detail_duration,
 				Duration:        data.Duration,
 				Description:     data.Description,
-				React_js:        data.React_js,
-				Vue_js:          data.Vue_js,
-				Angular:         data.Angular,
-				Laravel:         data.Laravel,
 			}
 		}
 	}
@@ -170,26 +155,18 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	fmt.Println(inputStartDate)
-
-	rjs := r.PostForm.Get("check-reactjs")
-	vjs := r.PostForm.Get("check-vuejs")
-	ang := r.PostForm.Get("check-angular")
-	lar := r.PostForm.Get("check-laravel")
-
-	detailReactJs, cardReactJs := rjs, rjs
-	detailVueJs, cardVueJs := vjs, vjs
-	detailAngular, cardAngular := ang, ang
-	detailLaravel, cardLaravel := lar, lar
+	var inputTechnologies []string
+	inputTechnologies = r.Form["technologies"]
+	fmt.Println(inputTechnologies)
 
 	parseStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	parseEndDate, _ := time.Parse("2006-01-02", inputEndDate)
 
 	hour := parseEndDate.Sub(parseStartDate).Hours()
 	day := hour / 24
-	week := math.Round(day / 7)
-	month := math.Round(day / 30)
-	year := math.Round(day / 365)
+	week := day / 7
+	month := day / 30
+	year := day / 365
 
 	formatStartDate := parseStartDate.Format("2 Jan 2006")
 	formatEndDate := parseEndDate.Format("2 Jan 2006")
@@ -219,69 +196,6 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		inputDuration = "WRONG DATE!"
 	}
 
-	var statusReactJs string
-	var statusVueJs string
-	var statusAngular string
-	var statusLaravel string
-
-	switch detailReactJs {
-	case "on":
-		detailReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
-		statusReactJs = "checked"
-	default:
-		detailReactJs = ""
-		statusReactJs = ""
-	}
-	switch detailVueJs {
-	case "on":
-		detailVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
-		statusVueJs = "checked"
-	default:
-		detailVueJs = ""
-		statusVueJs = ""
-	}
-	switch detailAngular {
-	case "on":
-		detailAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
-		statusAngular = "checked"
-	default:
-		detailAngular = ""
-		statusAngular = ""
-	}
-	switch detailLaravel {
-	case "on":
-		detailLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
-		statusLaravel = "checked"
-	default:
-		detailLaravel = ""
-		statusLaravel = ""
-	}
-
-	switch cardReactJs {
-	case "on":
-		cardReactJs = `<i class="fa-brands fa-react fa-xl me-2"></i>`
-	default:
-		cardReactJs = ""
-	}
-	switch cardVueJs {
-	case "on":
-		cardVueJs = `<i class="fa-brands fa-vuejs fa-xl me-2"></i>`
-	default:
-		cardVueJs = ""
-	}
-	switch cardAngular {
-	case "on":
-		cardAngular = `<i class="fa-brands fa-angular fa-xl me-2"></i>`
-	default:
-		cardAngular = ""
-	}
-	switch cardLaravel {
-	case "on":
-		cardLaravel = `<i class="fa-brands fa-laravel fa-xl me-2"></i>`
-	default:
-		cardLaravel = ""
-	}
-
 	newProject := Project{
 		Project_name:    inputProjectName,
 		Start_date:      parseStartDate,
@@ -289,23 +203,12 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
-		React_js:        detailReactJs,
-		Vue_js:          detailVueJs,
-		Angular:         detailAngular,
-		Laravel:         detailLaravel,
-		Icon_react_js:   cardReactJs,
-		Icon_vue_js:     cardVueJs,
-		Icon_angular:    cardAngular,
-		Icon_laravel:    cardLaravel,
-		Status_react_js: statusReactJs,
-		Status_vue_js:   statusVueJs,
-		Status_angular:  statusAngular,
-		Status_laravel:  statusLaravel,
+		Technologies:    inputTechnologies,
 	}
 
 	dataProject = append(dataProject, newProject)
 
-	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func formAddProject(w http.ResponseWriter, r *http.Request) {
@@ -345,14 +248,6 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 				Detail_duration: data.Detail_duration,
 				Duration:        data.Duration,
 				Description:     data.Description,
-				React_js:        data.React_js,
-				Vue_js:          data.Vue_js,
-				Angular:         data.Angular,
-				Laravel:         data.Laravel,
-				Status_react_js: data.Status_react_js,
-				Status_vue_js:   data.Status_vue_js,
-				Status_angular:  data.Status_angular,
-				Status_laravel:  data.Status_laravel,
 			}
 		}
 	}
@@ -363,7 +258,7 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.Execute(w, data)
-	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func editProject(w http.ResponseWriter, r *http.Request) {
@@ -378,15 +273,9 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	inputEndDate := r.PostForm.Get("input-end-date")
 	inputDescription := r.PostForm.Get("input-description")
 
-	rjs := r.PostForm.Get("check-reactjs")
-	vjs := r.PostForm.Get("check-vuejs")
-	ang := r.PostForm.Get("check-angular")
-	lar := r.PostForm.Get("check-laravel")
-
-	detailReactJs, cardReactJs := rjs, rjs
-	detailVueJs, cardVueJs := vjs, vjs
-	detailAngular, cardAngular := ang, ang
-	detailLaravel, cardLaravel := lar, lar
+	var inputTechnologies []string
+	inputTechnologies = r.Form["technologies"]
+	fmt.Println(inputTechnologies)
 
 	parseStartDate, _ := time.Parse("2006-01-02", inputStartDate)
 	parseEndDate, _ := time.Parse("2006-01-02", inputEndDate)
@@ -425,56 +314,6 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 		inputDuration = "WRONG DATE!"
 	}
 
-	switch detailReactJs {
-	case "on":
-		detailReactJs = `<p><i class="fa-brands fa-react fa-xl me-2"></i>React Js</p>`
-	default:
-		detailReactJs = ""
-	}
-	switch detailVueJs {
-	case "on":
-		detailVueJs = `<p><i class="fa-brands fa-vuejs fa-xl me-2"></i>Vue Js</p>`
-	default:
-		detailVueJs = ""
-	}
-	switch detailAngular {
-	case "on":
-		detailAngular = `<p><i class="fa-brands fa-angular fa-xl me-2"></i>Angular</p>`
-	default:
-		detailAngular = ""
-	}
-	switch detailLaravel {
-	case "on":
-		detailLaravel = `<p><i class="fa-brands fa-laravel fa-xl me-2"></i>Laravel</p>`
-	default:
-		detailLaravel = ""
-	}
-
-	switch cardReactJs {
-	case "on":
-		cardReactJs = `<i class="fa-brands fa-react fa-xl me-2"></i>`
-	default:
-		cardReactJs = ""
-	}
-	switch cardVueJs {
-	case "on":
-		cardVueJs = `<i class="fa-brands fa-vuejs fa-xl me-2"></i>`
-	default:
-		cardVueJs = ""
-	}
-	switch cardAngular {
-	case "on":
-		cardAngular = `<i class="fa-brands fa-angular fa-xl me-2"></i>`
-	default:
-		cardAngular = ""
-	}
-	switch cardLaravel {
-	case "on":
-		cardLaravel = `<i class="fa-brands fa-laravel fa-xl me-2"></i>`
-	default:
-		cardLaravel = ""
-	}
-
 	updateProject := Project{
 		Project_name:    inputProjectName,
 		Start_date:      parseStartDate,
@@ -482,19 +321,11 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 		Detail_duration: inputDetailDuration,
 		Duration:        inputDuration,
 		Description:     inputDescription,
-		React_js:        detailReactJs,
-		Vue_js:          detailVueJs,
-		Angular:         detailAngular,
-		Laravel:         detailLaravel,
-		Icon_react_js:   cardReactJs,
-		Icon_vue_js:     cardVueJs,
-		Icon_angular:    cardAngular,
-		Icon_laravel:    cardLaravel,
 	}
 
 	dataProject[index] = updateProject
 
-	http.Redirect(w, r, "/my-project", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 
 }
 
@@ -503,5 +334,5 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 
 	dataProject = append(dataProject[:index], dataProject[index+1:]...)
 
-	http.Redirect(w, r, "/my-project", http.StatusFound)
+	http.Redirect(w, r, "/home", http.StatusFound)
 }
