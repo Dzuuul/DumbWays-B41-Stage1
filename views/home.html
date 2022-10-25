@@ -136,14 +136,14 @@
                 </div>
                 <div class="d-flex flex-column mt-auto">
                   <div class="container" style="padding-left: 3px;">
-                    {{range $index, $item := $data.Technologies}}
-                    {{if eq $item "on-react-js"}}
+                    {{range $index, $value := $data.Technologies}}
+                    {{if eq $value "on-react-js"}}
                     <i class="fa-brands fa-react fa-xl ms-0"></i>
-                    {{else if eq $item "on-vue-js"}}
+                    {{else if eq $value "on-vue-js"}}
                     <i class="fa-brands fa-vuejs fa-xl ms-2"></i>
-                    {{else if eq $item "on-angular"}}
+                    {{else if eq $value "on-angular"}}
                     <i class="fa-brands fa-angular fa-xl ms-2"></i>
-                    {{else if eq $item "on-laravel"}}
+                    {{else if eq $value "on-laravel"}}
                     <i class="fa-brands fa-laravel fa-xl ms-2"></i>
                     {{end}}
                     {{end}}
