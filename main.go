@@ -95,22 +95,22 @@ func project(w http.ResponseWriter, r *http.Request) {
 		var inputDuration string
 
 		switch {
-		case year == 1:
-			inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " year"
-		case year > 1:
-			inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " years"
-		case month == 1:
-			inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " month"
-		case month > 1:
-			inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " months"
-		case week == 1:
-			inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " week"
-		case week > 1:
-			inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " weeks"
 		case day == 1:
-			inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " day"
-		case day > 1:
-			inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " days"
+			inputDuration = strconv.Itoa(int(day)) + " day"
+		case day > 1 && day <= 6:
+			inputDuration = strconv.Itoa(int(day)) + " days"
+		case day == 7:
+			inputDuration = strconv.Itoa(int(week)) + " week"
+		case day > 7 && day <= 29:
+			inputDuration = strconv.Itoa(int(week)) + " weeks"
+		case day == 30:
+			inputDuration = strconv.Itoa(int(month)) + " month"
+		case day > 30 && day <= 364:
+			inputDuration = strconv.Itoa(int(month)) + " months"
+		case day == 365:
+			inputDuration = strconv.Itoa(int(year)) + " year"
+		case day > 365:
+			inputDuration = strconv.Itoa(int(year)) + " years"
 		default:
 			inputDuration = "WRONG DATE!"
 		}
@@ -165,22 +165,22 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 	var inputDuration string
 
 	switch {
-	case year == 1:
-		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " year"
-	case year > 1:
-		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " years"
-	case month == 1:
-		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " month"
-	case month > 1:
-		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " months"
-	case week == 1:
-		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " week"
-	case week > 1:
-		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " weeks"
 	case day == 1:
-		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " day"
-	case day > 1:
-		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " days"
+		inputDuration = strconv.Itoa(int(day)) + " day"
+	case day > 1 && day <= 6:
+		inputDuration = strconv.Itoa(int(day)) + " days"
+	case day == 7:
+		inputDuration = strconv.Itoa(int(week)) + " week"
+	case day > 7 && day <= 29:
+		inputDuration = strconv.Itoa(int(week)) + " weeks"
+	case day == 30:
+		inputDuration = strconv.Itoa(int(month)) + " month"
+	case day > 30 && day <= 364:
+		inputDuration = strconv.Itoa(int(month)) + " months"
+	case day == 365:
+		inputDuration = strconv.Itoa(int(year)) + " year"
+	case day > 365:
+		inputDuration = strconv.Itoa(int(year)) + " years"
 	default:
 		inputDuration = "WRONG DATE!"
 	}
@@ -284,22 +284,22 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	var inputDuration string
 
 	switch {
-	case year == 1:
-		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " year"
-	case year > 1:
-		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " years"
-	case month == 1:
-		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " month"
-	case month > 1:
-		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " months"
-	case week == 1:
-		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " week"
-	case week > 1:
-		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " weeks"
 	case day == 1:
-		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " day"
-	case day > 1:
-		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " days"
+		inputDuration = strconv.Itoa(int(day)) + " day"
+	case day > 1 && day <= 6:
+		inputDuration = strconv.Itoa(int(day)) + " days"
+	case day == 7:
+		inputDuration = strconv.Itoa(int(week)) + " week"
+	case day > 7 && day <= 29:
+		inputDuration = strconv.Itoa(int(week)) + " weeks"
+	case day == 30:
+		inputDuration = strconv.Itoa(int(month)) + " month"
+	case day > 30 && day <= 364:
+		inputDuration = strconv.Itoa(int(month)) + " months"
+	case day == 365:
+		inputDuration = strconv.Itoa(int(year)) + " year"
+	case day > 365:
+		inputDuration = strconv.Itoa(int(year)) + " years"
 	default:
 		inputDuration = "WRONG DATE!"
 	}
@@ -370,22 +370,22 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	var inputDuration string
 
 	switch {
-	case year == 1:
-		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " year"
-	case year > 1:
-		inputDuration = strconv.FormatFloat(year, 'f', 0, 64) + " years"
-	case month == 1:
-		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " month"
-	case month > 1:
-		inputDuration = strconv.FormatFloat(month, 'f', 0, 64) + " months"
-	case week == 1:
-		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " week"
-	case week > 1:
-		inputDuration = strconv.FormatFloat(week, 'f', 0, 64) + " weeks"
 	case day == 1:
-		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " day"
-	case day > 1:
-		inputDuration = strconv.FormatFloat(day, 'f', 0, 64) + " days"
+		inputDuration = strconv.Itoa(int(day)) + " day"
+	case day > 1 && day <= 6:
+		inputDuration = strconv.Itoa(int(day)) + " days"
+	case day == 7:
+		inputDuration = strconv.Itoa(int(week)) + " week"
+	case day > 7 && day <= 29:
+		inputDuration = strconv.Itoa(int(week)) + " weeks"
+	case day == 30:
+		inputDuration = strconv.Itoa(int(month)) + " month"
+	case day > 30 && day <= 364:
+		inputDuration = strconv.Itoa(int(month)) + " months"
+	case day == 365:
+		inputDuration = strconv.Itoa(int(year)) + " year"
+	case day > 365:
+		inputDuration = strconv.Itoa(int(year)) + " years"
 	default:
 		inputDuration = "WRONG DATE!"
 	}
