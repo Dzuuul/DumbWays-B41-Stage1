@@ -84,52 +84,34 @@
           <div class="container">
             <div class="row">
 
-              {{range $index, $value := .Update.Technologies}}
+              {{range $index, $tech := .Update.Technologies}}
+                {{$react := "ReactJs"}}
+                {{$vue := "VueJs"}}
+                {{$angular := "Angular"}}
+                {{$laravel := "Laravel"}}
               <div class="col-6">
-                {{if eq $value "on-react-js"}}
-                <p class="my-1"><input value="on-react-js" name="technologies" class="form-check-input" type="checkbox" id="input-reactjs"
-                  name="input-reactjs" aria-label="Checkbox for following text input" checked>
-                  <label for="input-reactjs">ReactJs</label>
+                <p class="my-1"><input value="ReactJs" name="technologies" class="form-check-input" type="checkbox" id="input-reactjs"
+                  name="input-reactjs" aria-label="Checkbox for following text input" {{if eq $tech $react}} checked {{else}} style="display: none;" {{end}}>
+                  <label for="input-reactjs"{{if eq $tech $react}} {{else}} style="display: none;" {{end}}>ReactJs</label>
                 </p>
-                {{else if eq $value nil}}
-                <p class="my-1"><input value="on-react-js" name="technologies" class="form-check-input" type="checkbox" id="input-reactjs"
-                  name="input-reactjs" aria-label="Checkbox for following text input">
-                  <label for="input-reactjs">ReactJs</label>
+
+                <p class="my-1"><input value="VueJs" name="technologies" class="form-check-input" type="checkbox" id="input-vuejs"
+                  name="input-vuejs" aria-label="Checkbox for following text input" {{if eq $tech $vue}} checked {{else}} style="display: none;" {{end}}>
+                  <label for="input-vuejs" {{if eq $tech $vue}} {{else}} style="display: none;" {{end}}>VueJs</label>
                 </p>
-                
-                {{else if eq $value "on-vue-js"}}
-                <p class="my-1"><input value="on-vue-js" name="technologies" class="form-check-input" type="checkbox" id="input-vuejs"
-                  name="input-vuejs" aria-label="Checkbox for following text input" checked>
-                  <label for="input-vuejs">VueJs</label>
+
+              <!-- </div>
+              <div class="col-6"> -->
+                <p class="my-1"><input value="Angular" name="technologies" class="form-check-input" type="checkbox" id="input-angular"
+                    name="input-angular" aria-label="Checkbox for following text input" {{if eq $tech $angular}} checked {{else}} style="display: none;" {{end}}>
+                  <label for="input-angular" {{if eq $tech $angular}} {{else}} style="display: none;" {{end}}>Angular</label>
                 </p>
-                {{else if eq $value nil}}
-                <p class="my-1"><input value="on-vue-js" name="technologies" class="form-check-input" type="checkbox" id="input-vuejs"
-                  name="input-vuejs" aria-label="Checkbox for following text input">
-                  <label for="input-vuejs">VueJs</label>
+
+                <p class="my-1"><input value="Laravel" name="technologies" class="form-check-input" type="checkbox" id="input-laravel"
+                    name="input-laravel" aria-label="Checkbox for following text input" {{if eq $tech $laravel}} checked {{else}} style="display: none;" {{end}}>
+                  <label for="input-laravel" {{if eq $tech $laravel}} {{else}} style="display: none;" {{end}}>Laravel</label>
                 </p>
-              </div>
-              <div class="col-6">
-                {{else if eq $value "on-angular"}}
-                <p class="my-1"><input value="on-angular" name="technologies" class="form-check-input" type="checkbox" id="input-angular"
-                    name="input-angular" aria-label="Checkbox for following text input" checked>
-                  <label for="input-angular">Angular</label>
-                </p>
-                {{else if eq $value nil}}
-                <p class="my-1"><input value="on-angular" name="technologies" class="form-check-input" type="checkbox" id="input-angular"
-                    name="input-angular" aria-label="Checkbox for following text input">
-                  <label for="input-angular">Angular</label>
-                </p>
-                {{else if eq $value "on-laravel"}}
-                <p class="my-1"><input value="on-laravel" name="technologies" class="form-check-input" type="checkbox" id="input-laravel"
-                    name="input-laravel" aria-label="Checkbox for following text input" checked>
-                  <label for="input-laravel">Laravel</label>
-                </p>
-                {{else if eq $value nil}}
-                <p class="my-1"><input value="on-laravel" name="technologies" class="form-check-input" type="checkbox" id="input-laravel"
-                    name="input-laravel" aria-label="Checkbox for following text input">
-                  <label for="input-laravel">Laravel</label>
-                </p>
-                {{end}}
+
               </div>
               {{end}}
 

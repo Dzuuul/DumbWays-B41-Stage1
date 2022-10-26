@@ -137,13 +137,13 @@
                 <div class="d-flex flex-column mt-auto">
                   <div class="container" style="padding-left: 3px;">
                     {{range $index, $value := $data.Technologies}}
-                    {{if eq $value "on-react-js"}}
+                    {{if eq $value "ReactJs"}}
                     <i class="fa-brands fa-react fa-xl ms-0"></i>
-                    {{else if eq $value "on-vue-js"}}
+                    {{else if eq $value "VueJs"}}
                     <i class="fa-brands fa-vuejs fa-xl ms-2"></i>
-                    {{else if eq $value "on-angular"}}
+                    {{else if eq $value "Angular"}}
                     <i class="fa-brands fa-angular fa-xl ms-2"></i>
-                    {{else if eq $value "on-laravel"}}
+                    {{else if eq $value "Laravel"}}
                     <i class="fa-brands fa-laravel fa-xl ms-2"></i>
                     {{end}}
                     {{end}}

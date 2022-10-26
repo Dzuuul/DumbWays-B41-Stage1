@@ -221,6 +221,7 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 
 	var inputTechnologies []string
 	inputTechnologies = r.Form["technologies"]
+	fmt.Println(inputTechnologies)
 
 	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_projects(name, start_date, end_date, description, technologies) VALUES ($1, $2, $3, $4, $5)", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies)
 
@@ -301,7 +302,6 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 
 	UpdateProject.Start_date_string = UpdateProject.Start_date.Format("2006-01-02")
 	UpdateProject.End_date_string = UpdateProject.End_date.Format("2006-01-02")
-	fmt.Println(UpdateProject.Start_date_string)
 
 	// UpdateProject.Start_date = strconv.Itoa(int(UpdateProject.Start_date)
 
