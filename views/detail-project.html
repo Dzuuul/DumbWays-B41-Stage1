@@ -73,17 +73,17 @@
               {{range $index, $value := .Project.Technologies}}
               <table class="col-lg-6">
                 <tr>
-                  {{if eq $value "on-react-js"}}
+                  {{if eq $value "ReactJs"}}
                   <td><i class="fa-brands fa-react fa-xl me-2" style="margin-bottom: 23px;"></i>React Js</td>
   
-                  {{else if eq $value "on-vue-js"}}
+                  {{else if eq $value "VUeJs"}}
                   <td><i class="fa-brands fa-vuejs fa-xl me-2" style="margin-bottom: 23px;"></i>Vue Js</td>
                 </tr>
                 <tr>
-                  {{else if eq $value "on-angular"}}
+                  {{else if eq $value "Angular"}}
                   <td><i class="fa-brands fa-angular fa-xl me-2" style="margin-bottom: 23px;"></i>Angular</td>
   
-                  {{else if eq $value "on-laravel"}}
+                  {{else if eq $value "Laravel"}}
                   <td><i class="fa-brands fa-laravel fa-xl me-2" style="margin-bottom: 23px;"></i>Laravel</td>
                   {{end}}
                 </tr>
