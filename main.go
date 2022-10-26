@@ -14,17 +14,17 @@ import (
 )
 
 type Project struct {
-	Id              int
-	Project_name    string
-	Start_date      time.Time
-	End_date        time.Time
-	Detail_duration string
-	Duration        string
-	Description     string
-	Technologies    []string
+	Id                int
+	Project_name      string
+	Start_date        time.Time
+	End_date          time.Time
+	Start_date_string string
+	End_date_string   string
+	Detail_duration   string
+	Duration          string
+	Description       string
+	Technologies      []string
 }
-
-// var dataProject = []Project{}
 
 func main() {
 	r := mux.NewRouter()
@@ -221,7 +221,6 @@ func addProject(w http.ResponseWriter, r *http.Request) {
 
 	var inputTechnologies []string
 	inputTechnologies = r.Form["technologies"]
-	fmt.Println(inputTechnologies)
 
 	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_projects(name, start_date, end_date, description, technologies) VALUES ($1, $2, $3, $4, $5)", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies)
 
@@ -300,6 +299,16 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	UpdateProject.Detail_duration = inputDetailDuration
 	UpdateProject.Duration = inputDuration
 
+	UpdateProject.Start_date_string = UpdateProject.Start_date.Format("2006-01-02")
+	UpdateProject.End_date_string = UpdateProject.End_date.Format("2006-01-02")
+	fmt.Println(UpdateProject.Start_date_string)
+
+	// UpdateProject.Start_date = strconv.Itoa(int(UpdateProject.Start_date)
+
+	// if UpdateProject.Technologies[0] != "" {
+
+	// }
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
@@ -311,7 +320,6 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.Execute(w, data)
-	// http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func editProject(w http.ResponseWriter, r *http.Request) {
