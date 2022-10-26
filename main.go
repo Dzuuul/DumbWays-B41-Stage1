@@ -5,7 +5,6 @@ import (
 	"day-10/connection"
 	"fmt"
 	"log"
-	"math"
 	"net/http"
 	"strconv"
 	"text/template"
@@ -25,7 +24,7 @@ type Project struct {
 	Technologies    []string
 }
 
-var dataProject = []Project{}
+// var dataProject = []Project{}
 
 func main() {
 	r := mux.NewRouter()
@@ -264,12 +263,6 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 
 	err = connection.Conn.QueryRow(context.Background(), "SELECT id, name, start_date, end_date, description, technologies FROM tb_projects WHERE id=$1", id).Scan(&UpdateProject.Id, &UpdateProject.Project_name, &UpdateProject.Start_date, &UpdateProject.End_date, &UpdateProject.Description, &UpdateProject.Technologies)
 
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error message : " + err.Error()))
-		return
-	}
-
 	hour := UpdateProject.End_date.Sub(UpdateProject.Start_date).Hours()
 	day := hour / 24
 	week := day / 7
@@ -307,38 +300,23 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	UpdateProject.Detail_duration = inputDetailDuration
 	UpdateProject.Duration = inputDuration
 
-	// for i, data := range dataProject {
-	// 	if id == i {
-	// 		UpdateProject = Project{
-	// 			Id:              data.Id,
-	// 			Project_name:    data.Project_name,
-	// 			Start_date:      data.Start_date,
-	// 			End_date:        data.End_date,
-	// 			Detail_duration: data.Detail_duration,
-	// 			Duration:        data.Duration,
-	// 			Description:     data.Description,
-	// 		}
-	// 	}
-	// }
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("error message : " + err.Error()))
+		return
+	}
 
 	data := map[string]interface{}{
 		"Update": UpdateProject,
 	}
 
-	// edit := Project{}
-
-	// id, _ := strconv.Atoi(mux.Vars(r)["id"])
-
-	// data := map[string]interface{}{
-	// 	"Edit": edit,
-	// }
-
 	tmpl.Execute(w, data)
-	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
+	// http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func editProject(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(mux.Vars(r)["id"])
+
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
@@ -353,53 +331,13 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	inputTechnologies = r.Form["technologies"]
 	fmt.Println(inputTechnologies)
 
-	parseStartDate, _ := time.Parse("2006-01-02", inputStartDate)
-	parseEndDate, _ := time.Parse("2006-01-02", inputEndDate)
+	_, err = connection.Conn.Exec(context.Background(), "UPDATE tb_projects SET name = $1, start_date = $2, end_date = $3, description = $4, technologies = $5 WHERE id = $6", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies, id)
 
-	hour := parseEndDate.Sub(parseStartDate).Hours()
-	day := hour / 24
-	week := math.Round(day / 7)
-	month := math.Round(day / 30)
-	year := math.Round(day / 365)
-
-	formatStartDate := parseStartDate.Format("2 Jan 2006")
-	formatEndDate := parseEndDate.Format("2 Jan 2006")
-
-	inputDetailDuration := formatStartDate + " - " + formatEndDate
-
-	var inputDuration string
-
-	switch {
-	case day == 1:
-		inputDuration = strconv.Itoa(int(day)) + " day"
-	case day > 1 && day <= 6:
-		inputDuration = strconv.Itoa(int(day)) + " days"
-	case day == 7:
-		inputDuration = strconv.Itoa(int(week)) + " week"
-	case day > 7 && day <= 29:
-		inputDuration = strconv.Itoa(int(week)) + " weeks"
-	case day == 30:
-		inputDuration = strconv.Itoa(int(month)) + " month"
-	case day > 30 && day <= 364:
-		inputDuration = strconv.Itoa(int(month)) + " months"
-	case day == 365:
-		inputDuration = strconv.Itoa(int(year)) + " year"
-	case day > 365:
-		inputDuration = strconv.Itoa(int(year)) + " years"
-	default:
-		inputDuration = "WRONG DATE!"
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("error message : " + err.Error()))
+		return
 	}
-
-	updateProject := Project{
-		Project_name:    inputProjectName,
-		Start_date:      parseStartDate,
-		End_date:        parseEndDate,
-		Detail_duration: inputDetailDuration,
-		Duration:        inputDuration,
-		Description:     inputDescription,
-	}
-
-	dataProject[id] = updateProject
 
 	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 
