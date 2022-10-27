@@ -303,12 +303,6 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 	UpdateProject.Start_date_string = UpdateProject.Start_date.Format("2006-01-02")
 	UpdateProject.End_date_string = UpdateProject.End_date.Format("2006-01-02")
 
-	// UpdateProject.Start_date = strconv.Itoa(int(UpdateProject.Start_date)
-
-	// if UpdateProject.Technologies[0] != "" {
-
-	// }
-
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
