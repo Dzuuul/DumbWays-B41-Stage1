@@ -1,5 +1,5 @@
 <!-- Moh Dzulfikri Maulana -->
-<!-- B41 Day 10-->
+<!-- B41 Day 11-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,6 +40,29 @@
           <li class="nav-item">
             <a class="nav-link" href="/form-add-project">Add Project</a>
           </li>
+        </ul>
+        <ul class="navbar-nav me-4">
+          {{if .Data.IsLogin}}
+          <li class="nav-item">
+              <a href="#" class="nav-link">Welcome {{.Data.UserName}}!</a>
+          </li>
+          <li class="nav-item">
+              <a href="#" class="nav-link"> | </a>
+          </li>
+          <li class="nav-item">
+              <a href="/logout" class="nav-link active fw-bold">Logout</a>
+          </li>
+          {{else}}
+          <li class="nav-item">
+              <a href="/register" class="nav-link active fw-bold">Register</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link"> | </a>
+          </li>
+          <li class="nav-item">
+              <a href="/login" class="nav-link active fw-bold">Login</a>
+          </li>
+          {{end}}
         </ul>
         <a href="/contact">
           <button class="btn btn-dark px-3 rounded-3" type="button">Contact Me</button></a>
