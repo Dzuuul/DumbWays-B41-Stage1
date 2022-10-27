@@ -1,5 +1,5 @@
 <!-- Moh Dzulfikri Maulana -->
-<!-- B41 Day 11 -->
+<!-- B41 Day 10 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,23 +44,17 @@
         <ul class="navbar-nav me-4">
           {{if .Data.IsLogin}}
           <li class="nav-item">
-              <a href="#" class="nav-link">Welcome {{.Data.UserName}}!</a>
+              <a href="#" class="nav-link fw-bold active">Welcome {{.Data.UserName}}!</a>
           </li>
           <li class="nav-item">
-              <a href="#" class="nav-link"> | </a>
-          </li>
-          <li class="nav-item">
-              <a href="/logout" class="nav-link active fw-bold">Logout</a>
+              <a href="/logout" class="nav-link">Logout</a>
           </li>
           {{else}}
           <li class="nav-item">
-              <a href="/form-register" class="nav-link active fw-bold">Register</a>
+              <a href="/form-register" class="nav-link">Register</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link"> | </a>
-          </li>
-          <li class="nav-item">
-              <a href="/form-login" class="nav-link active fw-bold">Login</a>
+              <a href="/form-login" class="nav-link">Login</a>
           </li>
           {{end}}
         </ul>
@@ -107,36 +101,30 @@
           <div class="container">
             <div class="row">
 
-              {{range $index, $tech := .Update.Technologies}}
-                {{$react := "ReactJs"}}
-                {{$vue := "VueJs"}}
-                {{$angular := "Angular"}}
-                {{$laravel := "Laravel"}}
               <div class="col-6">
                 <p class="my-1"><input value="ReactJs" name="technologies" class="form-check-input" type="checkbox" id="input-reactjs"
-                  name="input-reactjs" aria-label="Checkbox for following text input" {{if eq $tech $react}} checked {{else}} style="display: none;" {{end}}>
-                  <label for="input-reactjs"{{if eq $tech $react}} {{else}} style="display: none;" {{end}}>ReactJs</label>
+                  name="input-reactjs" aria-label="Checkbox for following text input">
+                  <label for="input-reactjs">ReactJs</label>
                 </p>
 
                 <p class="my-1"><input value="VueJs" name="technologies" class="form-check-input" type="checkbox" id="input-vuejs"
-                  name="input-vuejs" aria-label="Checkbox for following text input" {{if eq $tech $vue}} checked {{else}} style="display: none;" {{end}}>
-                  <label for="input-vuejs" {{if eq $tech $vue}} {{else}} style="display: none;" {{end}}>VueJs</label>
-                </p>
-
-              <!-- </div>
-              <div class="col-6"> -->
-                <p class="my-1"><input value="Angular" name="technologies" class="form-check-input" type="checkbox" id="input-angular"
-                    name="input-angular" aria-label="Checkbox for following text input" {{if eq $tech $angular}} checked {{else}} style="display: none;" {{end}}>
-                  <label for="input-angular" {{if eq $tech $angular}} {{else}} style="display: none;" {{end}}>Angular</label>
-                </p>
-
-                <p class="my-1"><input value="Laravel" name="technologies" class="form-check-input" type="checkbox" id="input-laravel"
-                    name="input-laravel" aria-label="Checkbox for following text input" {{if eq $tech $laravel}} checked {{else}} style="display: none;" {{end}}>
-                  <label for="input-laravel" {{if eq $tech $laravel}} {{else}} style="display: none;" {{end}}>Laravel</label>
+                  name="input-vuejs" aria-label="Checkbox for following text input">
+                  <label for="input-vuejs">VueJs</label>
                 </p>
 
               </div>
-              {{end}}
+              <div class="col-6">
+                <p class="my-1"><input value="Angular" name="technologies" class="form-check-input" type="checkbox" id="input-angular"
+                    name="input-angular" aria-label="Checkbox for following text input">
+                  <label for="input-angular">Angular</label>
+                </p>
+
+                <p class="my-1"><input value="Laravel" name="technologies" class="form-check-input" type="checkbox" id="input-laravel"
+                    name="input-laravel" aria-label="Checkbox for following text input">
+                  <label for="input-laravel">Laravel</label>
+                </p>
+
+              </div>
 
             </div>
 

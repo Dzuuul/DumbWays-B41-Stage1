@@ -1,5 +1,5 @@
 <!-- Moh Dzulfikri Maulana -->
-<!-- B41 Day 11 -->
+<!-- B41 Day 10 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,25 +45,19 @@
           </li>
         </ul>
         <ul class="navbar-nav me-4">
-          {{if .Data.IsLogin}}
+          {{if .IsLogin}}
           <li class="nav-item">
-              <a href="#" class="nav-link">Welcome {{.Data.UserName}}!</a>
+              <a href="#" class="nav-link fw-bold active">Welcome {{.UserName}}!</a>
           </li>
           <li class="nav-item">
-              <a href="#" class="nav-link"> | </a>
-          </li>
-          <li class="nav-item">
-              <a href="/logout" class="nav-link active fw-bold">Logout</a>
+              <a href="/logout" class="nav-link">Logout</a>
           </li>
           {{else}}
           <li class="nav-item">
-              <a href="/form-register" class="nav-link active fw-bold">Register</a>
+              <a href="/form-register" class="nav-link">Register</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link"> | </a>
-          </li>
-          <li class="nav-item">
-              <a href="/form-login" class="nav-link active fw-bold">Login</a>
+              <a href="/form-login" class="nav-link">Login</a>
           </li>
           {{end}}
         </ul>
@@ -75,8 +69,16 @@
 
   </header>
 
+
+
   <section>
     <div class="container mb-5 p-5 bg-body rounded-3 shadow-sm" style="max-width: 955px; margin-top: 13vh;">
+      {{if .FlashData}}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{.FlashData}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {{end}}
       <div class="row">
         <div class="col-xl-7 col-md-6 col-sm-12 justify-content-md-center text-decoration-none d-flex flex-column">
           <h2 class="fw-bold pb-2">Hi Welcome to my hut</h2>

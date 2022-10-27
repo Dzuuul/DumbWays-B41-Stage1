@@ -39,27 +39,12 @@
               </li>
             </ul>
             <ul class="navbar-nav me-4">
-              {{if .Data.IsLogin}}
-              <li class="nav-item">
-                  <a href="#" class="nav-link">Welcome {{.Data.UserName}}!</a>
-              </li>
-              <li class="nav-item">
-                  <a href="#" class="nav-link"> | </a>
-              </li>
-              <li class="nav-item">
-                  <a href="/logout" class="nav-link active fw-bold">Logout</a>
-              </li>
-              {{else}}
               <li class="nav-item">
                   <a href="/form-register" class="nav-link active fw-bold">Register</a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link"> | </a>
+                  <a href="/form-login" class="nav-link">Login</a>
               </li>
-              <li class="nav-item">
-                  <a href="/form-login" class="nav-link active fw-bold">Login</a>
-              </li>
-              {{end}}
             </ul>
             <a href="/contact">
               <button class="btn btn-dark px-3 rounded-3" type="button">Contact Me</button></a>
@@ -71,22 +56,22 @@
 
   <section>
     <div>
-      <h2 class="text-center fw-semibold mb-4" style="margin-top: 13vh;">REGISTER</h2>
+      <h4 class="text-center fw-semibold mb-4" style="margin-top: 18vh;">REGISTER YOUR ACCOUNT</h4>
 
       <form class="container" style="width: 350px;" action="/register" method="post">
         <div class="mb-3">
-          <label for="input-register-name" class="form-label">Name</label>
-          <input name="input-register-name" type="text" id="input-register-name" class="form-control">
+          <label for="inputName" class="form-label">Name</label> 
+          <input name="inputName" type="text" id="inputName" class="form-control" required>
         </div>
        
         <div class="mb-3">
-          <label for="input-register-email" class="form-label">Email</label>
-          <input name="input-register-email" type="email" id="input-register-email" class="form-control">
+          <label for="inputEmail" class="form-label">Email</label>
+          <input name="inputEmail" type="email" id="inputEmail" class="form-control" required>
         </div>
 
         <div class="mb-3">
-          <label for="input-register-password" class="form-label">Password</label>
-          <input name="input-register-password" type="password" id="input-register-password" class="form-control">
+          <label for="inputPassword" class="form-label">Password</label>
+          <input name="inputPassword" type="password" id="inputPassword" class="form-control" required>
         </div>
 
         <div class="submit-btn mt-5 d-flex justify-content-end">

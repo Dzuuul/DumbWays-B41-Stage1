@@ -1,5 +1,5 @@
 <!-- Moh Dzulfikri Maulana -->
-<!-- B41 Day 11 -->
+<!-- B41 Day 10 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,23 +45,17 @@
         <ul class="navbar-nav me-4">
           {{if .Data.IsLogin}}
           <li class="nav-item">
-              <a href="#" class="nav-link">Welcome {{.Data.UserName}}!</a>
+              <a href="#" class="nav-link fw-bold active">Welcome {{.Data.UserName}}!</a>
           </li>
           <li class="nav-item">
-              <a href="#" class="nav-link"> | </a>
-          </li>
-          <li class="nav-item">
-              <a href="/logout" class="nav-link active fw-bold">Logout</a>
+              <a href="/logout" class="nav-link">Logout</a>
           </li>
           {{else}}
           <li class="nav-item">
-              <a href="/form-register" class="nav-link active fw-bold">Register</a>
+              <a href="/form-register" class="nav-link">Register</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link"> | </a>
-          </li>
-          <li class="nav-item">
-              <a href="/form-login" class="nav-link active fw-bold">Login</a>
+              <a href="/form-login" class="nav-link">Login</a>
           </li>
           {{end}}
         </ul>
@@ -99,7 +93,7 @@
                   {{if eq $value "ReactJs"}}
                   <td><i class="fa-brands fa-react fa-xl me-2" style="margin-bottom: 23px;"></i>React Js</td>
   
-                  {{else if eq $value "VueJs"}}
+                  {{else if eq $value "VUeJs"}}
                   <td><i class="fa-brands fa-vuejs fa-xl me-2" style="margin-bottom: 23px;"></i>Vue Js</td>
                 </tr>
                 <tr>

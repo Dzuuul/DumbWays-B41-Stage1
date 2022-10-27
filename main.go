@@ -17,10 +17,14 @@ import (
 )
 
 type MetaData struct {
-	Project_name string
-	IsLogin      bool
-	UserName     string
-	FlashData    string
+	Title     string
+	IsLogin   bool
+	UserName  string
+	FlashData string
+}
+
+var Data = MetaData{
+	Title: "Personal Web",
 }
 
 type Project struct {
@@ -43,8 +47,6 @@ type User struct {
 	Email    string
 	Password string
 }
-
-var Data = MetaData{}
 
 func main() {
 	r := mux.NewRouter()
@@ -78,15 +80,14 @@ func main() {
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/index.html")
-
+	var tmpl, err = template.ParseFiles("views/index.html")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error message : " + err.Error()))
+		w.Write([]byte("message : " + err.Error()))
 		return
 	}
 
-	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
 	session, _ := store.Get(r, "SESSION_KEY")
 
 	if session.Values["IsLogin"] != true {
@@ -177,10 +178,17 @@ func project(w http.ResponseWriter, r *http.Request) {
 
 		each.Duration = inputDuration
 
+		if session.Values["IsLogin"] != true {
+			each.IsLogin = false
+		} else {
+			each.IsLogin = session.Values["IsLogin"].(bool)
+		}
+
 		result = append(result, each)
 	}
 
 	respData := map[string]interface{}{
+		"Data":     Data,
 		"Projects": result,
 	}
 
@@ -201,6 +209,18 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var Data = MetaData{}
+
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
+
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
+		Data.UserName = session.Values["Name"].(string)
+	}
+
 	ProjectDetail := Project{}
 
 	err = connection.Conn.QueryRow(context.Background(), "SELECT id, name, start_date, end_date, description, technologies FROM tb_projects WHERE id=$1", id).Scan(&ProjectDetail.Id, &ProjectDetail.Project_name, &ProjectDetail.Start_date, &ProjectDetail.End_date, &ProjectDetail.Description, &ProjectDetail.Technologies)
@@ -209,6 +229,12 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
 		return
+	}
+
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
 	}
 
 	hour := ProjectDetail.End_date.Sub(ProjectDetail.Start_date).Hours()
@@ -253,6 +279,7 @@ func detailProject(w http.ResponseWriter, r *http.Request) {
 		"Project": ProjectDetail,
 	}
 
+	w.WriteHeader(http.StatusOK)
 	tmpl.Execute(w, data)
 }
 
@@ -267,7 +294,17 @@ func contact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl.Execute(w, nil)
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
+
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
+		Data.UserName = session.Values["Name"].(string)
+	}
+
+	tmpl.Execute(w, Data)
 }
 
 func addProject(w http.ResponseWriter, r *http.Request) {
@@ -305,7 +342,16 @@ func formAddProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl.Execute(w, nil)
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
+
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
+		Data.UserName = session.Values["Name"].(string)
+	}
+	tmpl.Execute(w, Data)
 }
 
 func formEditProject(w http.ResponseWriter, r *http.Request) {
@@ -319,6 +365,18 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error message : " + err.Error()))
 		return
+	}
+
+	var Data = MetaData{}
+
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
+
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
+		Data.UserName = session.Values["Name"].(string)
 	}
 
 	UpdateProject := Project{}
@@ -371,7 +429,14 @@ func formEditProject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
+	}
+
 	data := map[string]interface{}{
+		"Data":   Data,
 		"Update": UpdateProject,
 	}
 
@@ -422,13 +487,14 @@ func deleteProject(w http.ResponseWriter, r *http.Request) {
 
 func formRegister(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tmpl, err := template.ParseFiles("views/register.html")
 
+	var tmpl, err = template.ParseFiles("views/form-register.html")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error message : " + err.Error()))
+		w.Write([]byte("message : " + err.Error()))
 	}
 
+	w.WriteHeader(http.StatusOK)
 	tmpl.Execute(w, nil)
 }
 
@@ -438,18 +504,18 @@ func register(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	registerName := r.PostForm.Get("input-register-name")
-	registerEmail := r.PostForm.Get("input-register-email")
-	registerPassword := r.PostForm.Get("input-register-password")
+	var name = r.PostForm.Get("inputName")
+	var email = r.PostForm.Get("inputEmail")
+	var password = r.PostForm.Get("inputPassword")
 
-	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(registerPassword), 10)
+	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
 
 	fmt.Println(passwordHash)
 
-	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_user(name, email, password) VALUES($1, $2, $3)", registerName, registerEmail, passwordHash)
+	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_users(name, email, password) VALUES($1, $2, $3)", name, email, passwordHash)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error message : " + err.Error()))
+		w.Write([]byte("message : " + err.Error()))
 		return
 	}
 
@@ -459,13 +525,14 @@ func register(w http.ResponseWriter, r *http.Request) {
 func formLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	tmpl, err := template.ParseFiles("views/login.html")
+	var tmpl, err = template.ParseFiles("views/form-login.html")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("error message : " + err.Error()))
+		w.Write([]byte("message : " + err.Error()))
+		return
 	}
 
-	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
 	session, _ := store.Get(r, "SESSION_KEY")
 
 	fm := session.Flashes("message")
@@ -483,32 +550,32 @@ func formLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
-	session, _ := store.Get(r, "SESSIONS_KEY")
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
 
 	err := r.ParseForm()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	loginEmail := r.PostForm.Get("input-login-email")
-	loginPassword := r.PostForm.Get("input-login-password")
+	email := r.PostForm.Get("inputEmail")
+	password := r.PostForm.Get("inputPassword")
 
 	user := User{}
 
-	err = connection.Conn.QueryRow(context.Background(), "SELECT * FROM tb_users WHERE email=$1", loginEmail).Scan(&user.Id, &user.Name, &user.Email, &user.Password)
-
+	err = connection.Conn.QueryRow(context.Background(), "SELECT * FROM tb_users WHERE email=$1", email).Scan(
+		&user.Id, &user.Name, &user.Email, &user.Password,
+	)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("error message : " + err.Error()))
+		w.Write([]byte("message : " + err.Error()))
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginPassword))
-
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("error message : " + err.Error()))
+		w.Write([]byte("message : " + err.Error()))
 		return
 	}
 
@@ -516,14 +583,15 @@ func login(w http.ResponseWriter, r *http.Request) {
 	session.Values["Name"] = user.Name
 	session.Options.MaxAge = 10800
 
-	session.AddFlash("Login Successful!", "message")
+	session.AddFlash("Successfully Login!", "message")
 	session.Save(r, w)
 
 	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
-	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
+	fmt.Println("Logout!")
+	var store = sessions.NewCookieStore([]byte("SESSION_KEY"))
 	session, _ := store.Get(r, "SESSION_KEY")
 	session.Options.MaxAge = -1
 	session.Save(r, w)
