@@ -1,0 +1,120 @@
+<!-- Moh Dzulfikri Maulana -->
+<!-- B41 Day 10 -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/e54d5e7924.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/public/css/style.css">
+  <title>{{.Project.Project_name}}</title>
+</head>
+
+<body>
+
+  <header class="navbar navbar-expand-lg bg-white shadow-sm fixed-top">
+
+    <div class="container-fluid mx-lg-5 mx-sm-1 py-1">
+      <a class="navbar-brand" href="/">
+        <img src="https://dumbways.id/assets/images/brandred.png" width="49px" alt="Dumbways Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-lg-3 me-sm-3">
+            <a class="nav-link active fw-bold" href="/home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/form-add-project">Add Project</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav me-4">
+          {{if .Data.IsLogin}}
+          <li class="nav-item">
+              <a href="#" class="nav-link fw-bold active">Welcome {{.Data.UserName}}!</a>
+          </li>
+          <li class="nav-item">
+              <a href="/logout" class="nav-link">Logout</a>
+          </li>
+          {{else}}
+          <li class="nav-item">
+              <a href="/form-register" class="nav-link">Register</a>
+          </li>
+          <li class="nav-item">
+              <a href="/form-login" class="nav-link">Login</a>
+          </li>
+          {{end}}
+        </ul>
+        <a href="/contact">
+          <button class="btn btn-dark px-3 rounded-3" type="button">Contact Me</button></a>
+        </a>
+      </div>
+    </div>
+
+  </header>
+
+  <div id="project-details" class="container-fluid" style="margin-top: 13vh; margin-bottom: 8vh; max-width: 865px;">
+    <h1 class="text-center fw-bold mb-5">{{.Project.Project_name}}</h1>
+    <div class="container mx-0 mt-4">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 justify-content-md-center justify-content-sm-center mb-2">
+          <div class="overflow-hidden mb-2" style="height: 18em;">
+            <img style="max-width: 76vh; max-height: 54vh;"
+              src="/uploads/{{.Project.Image}}"
+              alt="cover page">
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div class="container">
+            <h4>Duration</h4>
+            <p><i class="fa-solid fa-calendar-days me-2"></i>{{.Project.Detail_duration}}</p>
+            <p><i class="fa-regular fa-clock me-2"></i>{{.Project.Duration}}</p>
+          </div>
+          <div class="container mt-4">
+            <h4>Technologies</h4>
+            <div class="row ms-0" style="margin-right: 60px;">
+              {{range $index, $value := .Project.Technologies}}
+              <table class="col-lg-6">
+                <tr>
+                  {{if eq $value "ReactJs"}}
+                  <td><i class="fa-brands fa-react fa-xl me-2" style="margin-bottom: 23px;"></i>React Js</td>
+  
+                  {{else if eq $value "VUeJs"}}
+                  <td><i class="fa-brands fa-vuejs fa-xl me-2" style="margin-bottom: 23px;"></i>Vue Js</td>
+                </tr>
+                <tr>
+                  {{else if eq $value "Angular"}}
+                  <td><i class="fa-brands fa-angular fa-xl me-2" style="margin-bottom: 23px;"></i>Angular</td>
+  
+                  {{else if eq $value "Laravel"}}
+                  <td><i class="fa-brands fa-laravel fa-xl me-2" style="margin-bottom: 23px;"></i>Laravel</td>
+                  {{end}}
+                </tr>
+              </table>
+              {{end}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mt-4 px-2" style="text-align: justify;">{{.Project.Description}}</p>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
