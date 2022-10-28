@@ -18,10 +18,8 @@ import (
 )
 
 type MetaData struct {
-	Title     string
-	IsLogin   bool
-	UserName  string
-	FlashData string
+	Title, UserName, FlashData string
+	IsLogin                    bool
 }
 
 var Data = MetaData{
@@ -29,25 +27,17 @@ var Data = MetaData{
 }
 
 type Project struct {
-	Id                int
-	Project_name      string
-	Start_date        time.Time
-	End_date          time.Time
-	Start_date_string string
-	End_date_string   string
-	Detail_duration   string
-	Duration          string
-	Description       string
-	Technologies      []string
-	Image             string
-	IsLogin           bool
+	Project_name, Start_date_string, End_date_string, Detail_duration, Duration, Description, Image string
+	Start_date                                                                                      time.Time
+	End_date                                                                                        time.Time
+	Technologies                                                                                    []string
+	Id                                                                                              int
+	IsLogin                                                                                         bool
 }
 
 type User struct {
-	Id       int
-	Name     string
-	Email    string
-	Password string
+	Id                    int
+	Name, Email, Password string
 }
 
 func main() {
