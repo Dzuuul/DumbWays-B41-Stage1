@@ -22,22 +22,22 @@ type MetaData struct {
 	IsLogin                    bool
 }
 
-var Data = MetaData{
-	Title: "Personal Web",
-}
+var Data = MetaData{}
 
 type Project struct {
-	Project_name, Start_date_string, End_date_string, Detail_duration, Duration, Description, Image string
-	Start_date                                                                                      time.Time
-	End_date                                                                                        time.Time
-	Technologies                                                                                    []string
-	Id                                                                                              int
-	IsLogin                                                                                         bool
+	Id           int
+	IsLogin      bool
+	Technologies []string
+	Start_date   time.Time
+	End_date     time.Time
+	Project_name, Start_date_string,
+	End_date_string, Detail_duration,
+	Duration, Description, Image string
 }
 
 type User struct {
-	Id                    int
 	Name, Email, Password string
+	Id                    int
 }
 
 func main() {
@@ -66,7 +66,7 @@ func main() {
 
 	r.HandleFunc("/logout", logout).Methods("GET")
 
-	fmt.Println("Server is running on port 5656...\t(press \"ctrl + c\" to abort)")
+	fmt.Println("Server is running on port 5656...\t(press \"ctrl + c\" to exit)")
 	http.ListenAndServe("localhost:5656", r)
 }
 
@@ -456,7 +456,7 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	inputTechnologies = r.Form["technologies"]
 	fmt.Println(inputTechnologies)
 
-	_, err = connection.Conn.Exec(context.Background(), "UPDATE tb_projects SET name = $1, start_date = $2, end_date = $3, description = $4, technologies = $5 WHERE id = $6", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies, id)
+	_, err = connection.Conn.Exec(context.Background(), "UPDATE tb_projects SET name = $1, start_date = $2, end_date = $3, description = $4, technologies = $5 WHERE id = $7", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies, id)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -506,9 +506,8 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	passwordHash, _ := bcrypt.GenerateFromPassword([]byte(password), 10)
 
-	fmt.Println(passwordHash)
+	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_users (name, email, password) VALUES($1, $2, $3)", name, email, passwordHash)
 
-	_, err = connection.Conn.Exec(context.Background(), "INSERT INTO tb_users(name, email, password) VALUES($1, $2, $3)", name, email, passwordHash)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("message : " + err.Error()))
@@ -541,6 +540,7 @@ func formLogin(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	Data.FlashData = strings.Join(flashes, "")
 	w.WriteHeader(http.StatusOK)
 	tmpl.Execute(w, Data)
 }
@@ -560,8 +560,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 	user := User{}
 
 	err = connection.Conn.QueryRow(context.Background(), "SELECT * FROM tb_users WHERE email=$1", email).Scan(
-		&user.Id, &user.Name, &user.Email, &user.Password,
-	)
+		&user.Id, &user.Name, &user.Email, &user.Password)
+
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("message : " + err.Error()))
@@ -582,7 +582,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	session.AddFlash("Successfully Login!", "message")
 	session.Save(r, w)
 
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	http.Redirect(w, r, "/home", http.StatusMovedPermanently)
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {

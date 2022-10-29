@@ -40,9 +40,11 @@
           <li class="nav-item mx-lg-3 me-sm-3">
             <a class="nav-link active fw-bold" href="/home">Home</a>
           </li>
+          {{if .Data.IsLogin}}
           <li class="nav-item">
             <a class="nav-link" href="/form-add-project">Add Project</a>
           </li>
+          {{end}}
         </ul>
         <ul class="navbar-nav me-4">
           {{if .Data.IsLogin}}
@@ -69,6 +71,14 @@
 
   </header>
 
+  {{if .FlashData}}
+  <div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{.FlashData}}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+  {{end}}
 
   <section>
     <div class="container mb-5 p-5 bg-body rounded-3 shadow-sm" style="max-width: 955px; margin-top: 13vh;">
