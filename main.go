@@ -57,7 +57,7 @@ func main() {
 	r.HandleFunc("/detail-project/{id}", detailProject).Methods("GET")
 	r.HandleFunc("/delete-project/{id}", deleteProject).Methods("GET")
 	r.HandleFunc("/add-my-project", middleware.UploadFile(addProject)).Methods("POST")
-	r.HandleFunc("/edit-my-project/{id}", editProject).Methods("POST")
+	r.HandleFunc("/edit-my-project/{id}", middleware.UploadFile(editProject)).Methods("POST")
 
 	r.HandleFunc("/form-register", formRegister).Methods("GET")
 	r.HandleFunc("/register", register).Methods("POST")
@@ -149,8 +149,6 @@ func project(w http.ResponseWriter, r *http.Request) {
 			var each = Project{}
 
 			err = data.Scan(&each.Id, &each.Project_name, &each.Start_date, &each.End_date, &each.Description, &each.Technologies, &each.Image)
-
-			fmt.Println(each.User_id)
 
 			if err != nil {
 				fmt.Println(err.Error())
@@ -532,7 +530,10 @@ func editProject(w http.ResponseWriter, r *http.Request) {
 	var inputTechnologies []string
 	inputTechnologies = r.Form["technologies"]
 
-	_, err = connection.Conn.Exec(context.Background(), "UPDATE tb_projects SET name = $1, start_date = $2, end_date = $3, description = $4, technologies = $5 WHERE id = $6", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies, id)
+	dataContex := r.Context().Value("dataFile")
+	inputImage := dataContex.(string)
+
+	_, err = connection.Conn.Exec(context.Background(), "UPDATE tb_projects SET name = $1, start_date = $2, end_date = $3, description = $4, technologies = $5, image = $6 WHERE id = $7", inputProjectName, inputStartDate, inputEndDate, inputDescription, inputTechnologies, inputImage, id)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
