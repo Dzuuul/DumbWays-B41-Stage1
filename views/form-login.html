@@ -56,6 +56,13 @@
           <h4 class="text-center fw-semibold mb-4" style="margin-top: 18vh;">LOGIN TO YOUR ACCOUNT</h4>
     
           <form class="container" style="width: 350px;" action="/login" method="post">
+
+            {{if .FlashData}}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{.FlashData}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{end}}
            
             <div class="mb-3">
               <label for="inputEmail" class="form-label">Email</label>
