@@ -49,7 +49,7 @@
         <ul class="navbar-nav me-4">
           {{if .Data.IsLogin}}
           <li class="nav-item">
-              <a href="#" class="nav-link fw-bold active">Welcome {{.Data.UserName}}!</a>
+              <a href="#" class="nav-link fw-bold active" style="text-transform: capitalize;">Welcome {{.Data.UserName}}!</a>
           </li>
           <li class="nav-item">
               <a href="/logout" class="nav-link">Logout</a>
@@ -74,10 +74,10 @@
 
   <section>
     <div class="container mb-5 p-5 bg-body rounded-3 shadow-sm" style="max-width: 955px; margin-top: 13vh;">
-      {{if .FlashData}}
+      {{if .Data.FlashData}}
       <div>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <strong>{{.FlashData}}</strong>
+          <strong>{{.Data.FlashData}}</strong>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       </div>
@@ -121,7 +121,11 @@
           <div class="card overflow-hidden shadow-sm" style="width: 327.2px;">
             <img style="width: 100%;" src="/public/img/roma-irama-crop.png" class="card-img-top" alt="Profile Picture">
             <div class="card-body" style="text-align: center;">
+              {{if .Data.IsLogin}}
+              <h3 class="card-title lh-1 fw-bold" style="text-transform: capitalize;">{{.Data.UserName}}</h3>
+              {{else}}
               <h3 class="card-title lh-1 fw-bold">Rhoma Irama</h3>
+              {{end}}
               <p class="card-text text-wrap overflow-hidden lh-1">Fullstack Developer</p>
             </div>
           </div>
@@ -136,12 +140,16 @@
 
   <section>
     <div class="container-fluid bg-body mt-5 shadow justify-content-sm-center">
+      {{if .Data.IsLogin}}
       <h2 class="fw-bold py-4" style="text-align: center;">MY PROJECT</h2>
-
+      {{else}}
+      <h2 class="fw-bold py-4" style="text-align: center;">OUR PROJECT</h2>
+      {{end}}
       <div class="d-flex justify-content-center">
         <div id="contents"
           class="row d-flex flex-wrap justify-content-lg-start justify-content-md-start justify-content-sm-center"
           style="width: 985px;">
+          {{if .Data.IsLogin}}
           {{range $index, $data := .Projects}}
 
           <!-- card -->
@@ -149,7 +157,7 @@
             <div class="card m-2 shadow">
               <div class="p-2 overflow-hidden rounded">
                 <div class="overflow-hidden rounded" style="height: 215px; width: auto; position: relative;">
-                  <img style="height: auto; width: 140%; left: -20%; top: -15%;"
+                  <img style="height: auto; width: 140%; left: -20%; top: -5%;"
                     src="/uploads/{{$data.Image}}"
                     class="card-img-top position-absolute" alt="Project Image">
                 </div>
@@ -181,8 +189,8 @@
                   </div>
                   <div class="container m-0 pt-3 text-center">
                     <div class="row justify-content-between">
-                      <a href="/form-edit-project/{{$data.Id}}" class="btn btn-dark col-5" style="width: 47%; ">Edit</a>
-                      <a href="/delete-project/{{$data.Id}}" class="btn btn-dark col-5" style="width: 47%;">Delete</a>
+                      <a href="/form-edit-project/{{$data.Id}}" class="btn btn-dark col-5" style="width: 47%;" >Edit</a>
+                      <a href="/delete-project/{{$data.Id}}" class="btn btn-dark col-5" style="width: 47%;" >Delete</a>
                     </div>
                   </div>
                 </div>
@@ -191,7 +199,57 @@
           </div>
 
           {{end}}
+          {{else}}
+          {{range $index, $data := .Projects}}
 
+          <!-- card -->
+          <div class="col-lg-4 col-md-6 col-sm-12 d-flex px-1">
+                      <div class="card m-2 shadow">
+                        <div class="p-2 overflow-hidden rounded">
+                          <div class="overflow-hidden rounded" style="height: 215px; width: auto; position: relative;">
+                            <img style="height: auto; width: 140%; left: -20%; top: -5%;"
+                              src="/uploads/{{$data.Image}}"
+                              class="card-img-top position-absolute" alt="Project Image">
+                          </div>
+                        </div>
+                        <div class="card-body pt-2 d-flex flex-column">
+                          <div class="overflow-hidden mb-4" style="height: 175px;">
+                            <a href="/detail-project/{{$data.Id}}" class="text-dark" style="text-decoration: none;">
+                              <h5 class="card-title fw-bold">{{$data.Project_name}}</h5>
+                            </a>
+                            <p class="mt-0" style="margin-bottom: 20px;">durasi : {{$data.Duration}}</p>
+                            <div class="text-wrap overflow-hidden">
+                              <p class="card-text">{{$data.Description}}</p>
+                            </div>
+                          </div>
+          
+                          <div class="d-flex flex-column mt-auto">
+                            <div class="container" style="padding-left: 3px;">
+                              {{range $index, $value := $data.Technologies}}
+                              {{if eq $value "ReactJs"}}
+                              <i class="fa-brands fa-react fa-xl ms-0"></i>
+                              {{else if eq $value "VueJs"}}
+                              <i class="fa-brands fa-vuejs fa-xl ms-2"></i>
+                              {{else if eq $value "Angular"}}
+                              <i class="fa-brands fa-angular fa-xl ms-2"></i>
+                              {{else if eq $value "Laravel"}}
+                              <i class="fa-brands fa-laravel fa-xl ms-2"></i>
+                              {{end}}
+                              {{end}}
+                            </div>
+                            <div class="container m-0 pt-3 text-center">
+                              <div class="row justify-content-between">
+                                <a href="/form-edit-project/{{$data.Id}}" class="btn btn-dark col-5" style="width: 47%; display: none;" >Edit</a>
+                                <a href="/delete-project/{{$data.Id}}" class="btn btn-dark col-5" style="width: 47%; display: none;" >Delete</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+          </div>
+          
+          {{end}}
+          {{end}}
 
         </div>
 

@@ -26,6 +26,7 @@ var Data = MetaData{}
 
 type Project struct {
 	Id           int
+	User_id      int
 	IsLogin      bool
 	Technologies []string
 	Start_date   time.Time
@@ -137,7 +138,7 @@ func project(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	Data.FlashData = strings.Join(flashes, " ")
+	Data.FlashData = strings.Join(flashes, "")
 
 	if session.Values["IsLogin"] != true {
 
@@ -148,6 +149,8 @@ func project(w http.ResponseWriter, r *http.Request) {
 			var each = Project{}
 
 			err = data.Scan(&each.Id, &each.Project_name, &each.Start_date, &each.End_date, &each.Description, &each.Technologies, &each.Image)
+
+			fmt.Println(each.User_id)
 
 			if err != nil {
 				fmt.Println(err.Error())
@@ -185,12 +188,6 @@ func project(w http.ResponseWriter, r *http.Request) {
 
 			each.Duration = inputDuration
 
-			if session.Values["IsLogin"] != true {
-				each.IsLogin = false
-			} else {
-				each.IsLogin = session.Values["IsLogin"].(bool)
-			}
-
 			result = append(result, each)
 		}
 
@@ -205,7 +202,6 @@ func project(w http.ResponseWriter, r *http.Request) {
 	} else {
 
 		userID := session.Values["Id"].(int)
-		fmt.Println(userID)
 
 		data, _ := connection.Conn.Query(context.Background(), "SELECT tb_projects.id, tb_projects.name, start_date, end_date, description, technologies, image FROM tb_projects WHERE tb_projects.user_id = $1 ORDER BY id DESC", userID)
 
@@ -250,12 +246,6 @@ func project(w http.ResponseWriter, r *http.Request) {
 			}
 
 			each.Duration = inputDuration
-
-			if session.Values["IsLogin"] != true {
-				each.IsLogin = false
-			} else {
-				each.IsLogin = session.Values["IsLogin"].(bool)
-			}
 
 			result = append(result, each)
 		}
@@ -599,6 +589,11 @@ func register(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("message : " + err.Error()))
 		return
 	}
+	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
+
+	session.AddFlash("Registration Successful!", "message")
+	session.Save(r, w)
 
 	http.Redirect(w, r, "/form-login", http.StatusMovedPermanently)
 }
@@ -678,8 +673,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 	session.Values["Id"] = user.Id
 	session.Options.MaxAge = 10800
 
-	fmt.Println(user.Id)
-
 	session.AddFlash("Successfully Login!", "message")
 	session.Save(r, w)
 
@@ -693,5 +686,5 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	session.Options.MaxAge = -1
 	session.Save(r, w)
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/home", http.StatusSeeOther)
 }
