@@ -49,9 +49,9 @@ func main() {
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 	r.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
 
-	r.HandleFunc("/", index).Methods("GET")
-	r.HandleFunc("/contact", contact).Methods("GET")
+	r.HandleFunc("/", project).Methods("GET")
 	r.HandleFunc("/home", project).Methods("GET")
+	r.HandleFunc("/contact", contact).Methods("GET")
 	r.HandleFunc("/form-add-project", formAddProject).Methods("GET")
 	r.HandleFunc("/form-edit-project/{id}", formEditProject).Methods("GET")
 	r.HandleFunc("/detail-project/{id}", detailProject).Methods("GET")
