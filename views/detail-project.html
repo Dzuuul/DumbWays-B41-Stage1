@@ -78,7 +78,7 @@
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 justify-content-md-center justify-content-sm-center mb-2">
           <div class="overflow-hidden mb-2" style="height: 18em;">
-            <img style="max-width: 76vh; max-height: 54vh;"
+            <img style="max-height: 308px;"
               src="/uploads/{{.Project.Image}}"
               alt="cover page">
           </div>
@@ -98,13 +98,13 @@
                   {{if eq $value "ReactJs"}}
                   <td><i class="fa-brands fa-react fa-xl me-2" style="margin-bottom: 23px;"></i>React Js</td>
   
-                  {{else if eq $value "VueJs"}}
-                  <td><i class="fa-brands fa-vuejs fa-xl me-2" style="margin-bottom: 23px;"></i>Vue Js</td>
-                </tr>
-                <tr>
                   {{else if eq $value "Angular"}}
                   <td><i class="fa-brands fa-angular fa-xl me-2" style="margin-bottom: 23px;"></i>Angular</td>
-  
+                </tr>
+                <tr>                  
+                  {{else if eq $value "VueJs"}}
+                  <td><i class="fa-brands fa-vuejs fa-xl me-2" style="margin-bottom: 23px;"></i>Vue Js</td>
+
                   {{else if eq $value "Laravel"}}
                   <td><i class="fa-brands fa-laravel fa-xl me-2" style="margin-bottom: 23px;"></i>Laravel</td>
                   {{end}}
