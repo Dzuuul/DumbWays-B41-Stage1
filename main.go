@@ -71,42 +71,6 @@ func main() {
 	http.ListenAndServe("localhost:5656", r)
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	var tmpl, err = template.ParseFiles("views/index.html")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("message : " + err.Error()))
-		return
-	}
-
-	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
-	session, _ := store.Get(r, "SESSION_KEY")
-
-	if session.Values["IsLogin"] != true {
-		Data.IsLogin = false
-	} else {
-		Data.IsLogin = session.Values["IsLogin"].(bool)
-		Data.UserName = session.Values["Name"].(string)
-	}
-
-	fm := session.Flashes("message")
-
-	var flashes []string
-	if len(fm) > 0 {
-		session.Save(r, w)
-		for _, fl := range fm {
-			flashes = append(flashes, fl.(string))
-		}
-	}
-
-	Data.FlashData = strings.Join(flashes, "")
-
-	w.WriteHeader(http.StatusOK)
-	tmpl.Execute(w, Data)
-}
-
 func allproject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
