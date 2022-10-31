@@ -49,7 +49,7 @@ func main() {
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 	r.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
 
-	r.HandleFunc("/", project).Methods("GET")
+	r.HandleFunc("/", allproject).Methods("GET")
 	r.HandleFunc("/home", project).Methods("GET")
 	r.HandleFunc("/contact", contact).Methods("GET")
 	r.HandleFunc("/form-add-project", formAddProject).Methods("GET")
@@ -105,6 +105,95 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	tmpl.Execute(w, Data)
+}
+
+func allproject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	var tmpl, err = template.ParseFiles("views/all-project.html")
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("error message : " + err.Error()))
+		return
+	}
+
+	store := sessions.NewCookieStore([]byte("SESSION_KEY"))
+	session, _ := store.Get(r, "SESSION_KEY")
+
+	if session.Values["IsLogin"] != true {
+		Data.IsLogin = false
+	} else {
+		Data.IsLogin = session.Values["IsLogin"].(bool)
+		Data.UserName = session.Values["Name"].(string)
+	}
+
+	fm := session.Flashes("message")
+
+	var flashes []string
+	if len(fm) > 0 {
+		session.Save(r, w)
+		for _, fl := range fm {
+			flashes = append(flashes, fl.(string))
+		}
+	}
+
+	Data.FlashData = strings.Join(flashes, "")
+
+	data, _ := connection.Conn.Query(context.Background(), "SELECT tb_projects.id, tb_projects.name, start_date, end_date, description, technologies, image FROM tb_projects ORDER BY id DESC")
+
+	var result []Project
+	for data.Next() {
+		var each = Project{}
+
+		err = data.Scan(&each.Id, &each.Project_name, &each.Start_date, &each.End_date, &each.Description, &each.Technologies, &each.Image)
+
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+
+		hour := each.End_date.Sub(each.Start_date).Hours()
+		day := hour / 24
+		week := day / 7
+		month := day / 30
+		year := day / 365
+
+		var inputDuration string
+
+		switch {
+		case day == 1:
+			inputDuration = strconv.Itoa(int(day)) + " day"
+		case day > 1 && day <= 6:
+			inputDuration = strconv.Itoa(int(day)) + " days"
+		case day == 7:
+			inputDuration = strconv.Itoa(int(week)) + " week"
+		case day > 7 && day <= 29:
+			inputDuration = strconv.Itoa(int(week)) + " weeks"
+		case day == 30:
+			inputDuration = strconv.Itoa(int(month)) + " month"
+		case day > 30 && day <= 364:
+			inputDuration = strconv.Itoa(int(month)) + " months"
+		case day == 365:
+			inputDuration = strconv.Itoa(int(year)) + " year"
+		case day > 365:
+			inputDuration = strconv.Itoa(int(year)) + " years"
+		default:
+			inputDuration = "WRONG DATE!"
+		}
+
+		each.Duration = inputDuration
+
+		result = append(result, each)
+	}
+
+	respData := map[string]interface{}{
+		"Data":     Data,
+		"Projects": result,
+	}
+
+	w.WriteHeader(http.StatusOK)
+	tmpl.Execute(w, respData)
 }
 
 func project(w http.ResponseWriter, r *http.Request) {
